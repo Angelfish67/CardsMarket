@@ -3,6 +3,7 @@ class PackOpener
     # Always lock the wallet first. Concurrent requests then re-read the balance
     # and starter status after the previous request has committed.
     user.with_lock do
+      raise GameplayError, "Dieses Konto ist deaktiviert." if user.suspended?
       pack.reload
       raise GameplayError, "Dieses Pack ist nicht mehr verfügbar." unless pack.active?
       if pack.starter? && (user.starter_pack_opened_at? || user.pack_openings.exists?(starter: true))

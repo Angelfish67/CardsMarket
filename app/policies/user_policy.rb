@@ -7,6 +7,10 @@ class UserPolicy < ApplicationPolicy
     admin? && record.is_a?(User)
   end
 
+  def grant_coins?
+    update?
+  end
+
   def suspend?
     update? && record.id != user.id
   end

@@ -1,8 +1,8 @@
 <% content_for :title, "Benutzer verwalten — Cards Market" %>
 <%= render "admin/shared/nav" %>
-<div class="page-heading"><div><h1>Die Community.</h1><p class="muted">Rollen und Zugang verwalten. Guthaben und Sammlungen bleiben bei den Benutzern.</p></div></div>
+<div class="page-heading"><div><h1>Die Community.</h1><p class="muted">Rollen und Zugang verwalten sowie Coins gutschreiben.</p></div></div>
 <%= form_with url: admin_users_path, method: :get, class: "admin-search" do |form| %><%= form.label :q, "Benutzername oder E-Mail" %><%= form.search_field :q, value: @query, maxlength: 100, placeholder: "Benutzer suchen …" %><%= form.submit "Suchen", class: "button button-primary" %><% end %>
 <div class="admin-panel admin-table-wrap"><table class="admin-table"><thead><tr><th>Benutzer</th><th>Rolle</th><th>Zugang</th><th>Coins</th><th>Aktion</th></tr></thead><tbody>
-<% @users.each do |user| %><tr><td><strong><%= user.username %></strong><small><%= user.email_address %></small></td><td><%= user.admin? ? "Admin" : "Trader" %></td><td><span class="admin-badge <%= "admin-badge-muted" if user.suspended? %>"><%= user.suspended? ? "Gesperrt" : "Aktiv" %></span></td><td><%= user.coins %></td><td><%= link_to "Berechtigungen", edit_admin_user_path(user), class: "button button-outline" if user_policy(user).update? %></td></tr><% end %>
+<% @users.each do |user| %><tr><td><strong><%= user.username %></strong><small><%= user.email_address %></small></td><td><%= user.admin? ? "Admin" : "Trader" %></td><td><span class="admin-badge <%= "admin-badge-muted" if user.suspended? %>"><%= user.suspended? ? "Gesperrt" : "Aktiv" %></span></td><td><%= user.coins %></td><td><div class="admin-catalog-actions"><%= link_to "Berechtigungen", edit_admin_user_path(user), class: "button button-outline" if user_policy(user).update? %><%= link_to "Coins vergeben", edit_admin_user_path(user, anchor: "coins"), class: "button button-primary" if user_policy(user).grant_coins? %></div></td></tr><% end %>
 </tbody></table><% if @users.empty? %><p class="muted admin-pad">Keine passenden Benutzer gefunden.</p><% end %></div>
 <%= render "admin/shared/pagination" %>

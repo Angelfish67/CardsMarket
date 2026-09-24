@@ -1,0 +1,47 @@
+<% content_for :title, "Mein Konto — Cards Market" %>
+<% content_for :head do %><meta name="turbo-cache-control" content="no-cache"><% end %>
+<div class="page-heading">
+  <div><span class="eyebrow">DEIN PROFIL. DEINE EINSTELLUNGEN.</span><h1>Mein Konto.</h1><p class="muted">Verwalte deine Profildaten und den Zugang zu deiner Sammlung.</p></div>
+  <%= link_to "Zur Übersicht ↗", root_path, class: "button button-outline" %>
+</div>
+<% if @user.errors.any? %>
+  <div role="alert" class="form-errors">
+    <strong>Die Änderung konnte nicht gespeichert werden:</strong>
+    <ul><% @user.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>
+  </div>
+<% end %>
+<div class="account-settings">
+  <section class="admin-panel account-panel" aria-labelledby="profile-heading">
+    <span class="eyebrow">01 / PROFIL</span><h2 id="profile-heading">Deine Angaben.</h2>
+    <p class="muted">Dein Benutzername erscheint im Marktplatz. Nach einer Änderung der E-Mail-Adresse meldest du dich auf allen Geräten neu an.</p>
+    <%= form_with url: account_path, method: :patch, scope: :account, class: "admin-form" do |form| %>
+      <div class="field"><%= form.label :username, "Benutzername", for: "profile_username" %><%= form.text_field :username, id: "profile_username", value: @user.username, required: true, maxlength: 30, autocomplete: "username" %></div>
+      <div class="field"><%= form.label :email_address, "E-Mail-Adresse", for: "profile_email" %><%= form.email_field :email_address, id: "profile_email", value: @user.email_address, required: true, autocomplete: "email" %></div>
+      <div class="field"><%= form.label :current_password, "Aktuelles Passwort", for: "profile_current_password" %><%= form.password_field :current_password, id: "profile_current_password", required: true, autocomplete: "current-password" %></div>
+      <div class="admin-form-actions"><%= form.submit "Profildaten speichern", class: "button button-primary", data: { turbo_submits_with: "Wird gespeichert …" } %></div>
+    <% end %>
+  </section>
+
+  <section class="admin-panel account-panel" aria-labelledby="password-heading">
+    <span class="eyebrow">02 / SICHERHEIT</span><h2 id="password-heading">Passwort ändern.</h2>
+    <p class="muted" id="account-password-rules">Mindestens 12 Zeichen, maximal 72 Bytes. Anschließend werden alle Sitzungen beendet und du meldest dich mit dem neuen Passwort an.</p>
+    <%= form_with url: password_account_path, method: :patch, scope: :account, class: "admin-form" do |form| %>
+      <div class="field"><%= form.label :current_password, "Aktuelles Passwort", for: "password_current_password" %><%= form.password_field :current_password, id: "password_current_password", required: true, autocomplete: "current-password" %></div>
+      <div class="field"><%= form.label :password, "Neues Passwort", for: "new_password" %><%= form.password_field :password, id: "new_password", required: true, minlength: 12, maxlength: 72, autocomplete: "new-password", aria: { describedby: "account-password-rules" } %></div>
+      <div class="field"><%= form.label :password_confirmation, "Neues Passwort wiederholen", for: "new_password_confirmation" %><%= form.password_field :password_confirmation, id: "new_password_confirmation", required: true, minlength: 12, maxlength: 72, autocomplete: "new-password" %></div>
+      <div class="admin-form-actions"><%= form.submit "Passwort ändern", class: "button button-primary", data: { turbo_submits_with: "Wird geändert …" } %></div>
+    <% end %>
+  </section>
+
+  <section class="admin-panel account-panel account-deactivation" aria-labelledby="deactivation-heading">
+    <span class="eyebrow">03 / KONTO PAUSIEREN</span><h2 id="deactivation-heading">Konto deaktivieren.</h2>
+    <p>Du wirst auf allen Geräten abgemeldet und kannst dich nicht mehr anmelden. Aktive Verkaufsangebote werden zurückgezogen; Karten, Coins und deine Historie bleiben erhalten.</p>
+    <p class="muted">Nur ein Admin kann dein Konto wieder aktivieren. Zurückgezogene Angebote werden dabei nicht automatisch neu eingestellt.</p>
+    <% if @user.admin? %><p class="admin-note">Der letzte aktive Admin kann sich nicht deaktivieren. Ernenne gegebenenfalls zuerst einen weiteren Admin.</p><% end %>
+    <%= form_with url: deactivate_account_path, method: :post, scope: :account, class: "admin-form" do |form| %>
+      <div class="field"><%= form.label :current_password, "Aktuelles Passwort", for: "deactivate_current_password" %><%= form.password_field :current_password, id: "deactivate_current_password", required: true, autocomplete: "current-password" %></div>
+      <label class="admin-check" for="deactivate_confirmation"><%= form.check_box :confirmation, id: "deactivate_confirmation", required: true %> Ich möchte mein Konto deaktivieren und meine Angebote zurückziehen.</label>
+      <div class="admin-form-actions"><%= form.submit "Konto deaktivieren", class: "button button-danger", data: { turbo_submits_with: "Wird deaktiviert …" } %></div>
+    <% end %>
+  </section>
+</div>

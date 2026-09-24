@@ -1,6 +1,6 @@
 module AdminHelper
   def admin_action_label(action)
-    { "destroy" => "Gelöscht", "create" => "Erstellt", "update" => "Bearbeitet", "permissions" => "Berechtigungen geändert", "moderate" => "Angebot entfernt" }.fetch(action, action)
+    { "coins_granted" => "Coins gutgeschrieben", "destroy" => "Gelöscht", "create" => "Erstellt", "update" => "Bearbeitet", "permissions" => "Berechtigungen geändert", "moderate" => "Angebot entfernt" }.fetch(action, action)
   end
 
   def admin_subject_label(type)
@@ -8,7 +8,7 @@ module AdminHelper
   end
 
   def admin_field_label(field)
-    { "image" => "Hochgeladenes Bild", "image_url" => "Bild-URL", "name" => "Name", "description" => "Beschreibung", "rarity" => "Seltenheit", "base_value" => "Grundwert",
+    { "coins" => "Guthaben", "amount" => "Gutschrift", "reason" => "Begründung", "image" => "Hochgeladenes Bild", "image_url" => "Bild-URL", "name" => "Name", "description" => "Beschreibung", "rarity" => "Seltenheit", "base_value" => "Grundwert",
       "active" => "Verfügbar", "price" => "Preis", "cards_count" => "Kartenanzahl", "starter" => "Starter-Pack",
       "multiplier" => "Multiplikator", "weight" => "Ziehgewicht", "role" => "Rolle", "suspended" => "Gesperrt",
       "status" => "Status", "id" => "Nummer" }.fetch(field, field)

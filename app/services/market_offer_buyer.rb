@@ -9,7 +9,7 @@ class MarketOfferBuyer
       wallets = User.where(id: [ buyer.id, seller_id ]).order(:id).lock.to_a
       purchasing_user = wallets.find { |user| user.id == buyer.id }
       seller = wallets.find { |user| user.id == seller_id }
-      raise GameplayError, "Dieses Angebot ist nicht mehr verfügbar." unless purchasing_user && seller
+      raise GameplayError, "Dieses Angebot ist nicht mehr verfügbar." unless purchasing_user && seller && !purchasing_user.suspended? && !seller.suspended?
 
       card = BrainrotCard.lock.find(offer.brainrot_card_id)
       offer.lock!

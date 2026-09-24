@@ -21,7 +21,7 @@
       <% end %>
       <% if authenticated? %>
         <nav class="main-nav" aria-label="Hauptnavigation">
-          <% [["Übersicht", root_path], ["Inventar", inventory_index_path], ["Marktplatz", marketplace_index_path], ["Packs", packs_index_path]].each do |label, path| %>
+          <% [["Übersicht", root_path], ["Inventar", inventory_index_path], ["Marktplatz", marketplace_index_path], ["Packs", packs_index_path], ["Mein Konto", edit_account_path]].each do |label, path| %>
             <%= link_to label, path, class: ("is-active" if current_page?(path)), aria: { current: ("page" if current_page?(path)) } %>
           <% end %>
           <% if AdminPolicy.new(Current.user).access? %>

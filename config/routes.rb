@@ -5,12 +5,18 @@ Rails.application.routes.draw do
     resources :brainrot_types, except: :show
     resources :packs, except: %i[ show destroy ]
     resources :ranks, only: %i[ index edit update ]
-    resources :users, only: %i[ index edit update ]
+    resources :users, only: %i[ index edit update ] do
+      post :credit_coins, on: :member
+    end
     resources :market_offers, only: %i[ index destroy ]
     resources :activities, only: :index
   end
   resource :registration, only: %i[ new create ]
   resource :session, only: %i[ new create destroy ]
+  resource :account, only: %i[ edit update ] do
+    patch :password
+    post :deactivate
+  end
 
   get "registrations/new"
   get "packs/index"

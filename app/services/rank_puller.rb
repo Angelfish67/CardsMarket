@@ -1,6 +1,7 @@
 class RankPuller
   def self.call(user:, card:, random: SecureRandom)
     user.with_lock do
+      raise GameplayError, "Dieses Konto ist deaktiviert." if user.suspended?
       card.with_lock do
         raise GameplayError, "Diese Karte gehört dir nicht." unless card.user_id == user.id
         raise GameplayError, "Ziehe zuerst das Verkaufsangebot für diese Karte zurück." if card.market_offers.active.exists?

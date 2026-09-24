@@ -1,6 +1,7 @@
 class MarketOfferCreator
   def self.call(user:, card:, price:)
     user.with_lock do
+      raise GameplayError, "Dieses Konto ist deaktiviert." if user.suspended?
       card.with_lock do
         raise GameplayError, "Du kannst nur eigene Karten anbieten." unless card.user_id == user.id
         raise GameplayError, "Diese Karte wird bereits angeboten." if card.market_offers.active.exists?

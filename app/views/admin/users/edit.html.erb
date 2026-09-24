@@ -1,6 +1,6 @@
-<% content_for :title, "Berechtigungen — Cards Market" %>
+<% content_for :title, "Benutzer verwalten — Cards Market" %>
 <%= render "admin/shared/nav" %>
-<div class="page-heading"><div><h1><%= @user.username %>.</h1><p class="muted"><%= @user.email_address %> · Berechtigungen bearbeiten</p></div></div>
+<div class="page-heading"><div><h1><%= @user.username %>.</h1><p class="muted"><%= @user.email_address %> · Berechtigungen und Guthaben verwalten</p></div></div>
 <section class="admin-panel admin-form-panel">
 <%= render "admin/shared/errors", record: @user %>
 <%= form_with model: [:admin, @user], class: "admin-form", data: { turbo_confirm: "Berechtigungen speichern? Bei einer Änderung werden die bestehenden Sitzungen dieses Kontos beendet." } do |form| %>
@@ -9,4 +9,23 @@
   <p class="admin-note">Eine Sperre verhindert neue Anmeldungen und beendet bestehende Sitzungen. Karten, Guthaben und Historie bleiben erhalten. Der letzte aktive Admin kann nicht herabgestuft werden.</p>
   <div class="admin-form-actions"><%= form.submit "Berechtigungen speichern", class: "button button-primary" %><%= link_to "Abbrechen", admin_users_path, class: "button button-outline" %></div>
 <% end %>
+</section>
+<section class="admin-panel admin-form-panel" id="coins" style="margin-top: 24px">
+  <h2>Coins gutschreiben</h2>
+  <p>Aktuelles Guthaben: <strong><%= number_with_delimiter(@user.coins) %> Coins</strong></p>
+  <% if user_policy(@user).grant_coins? %>
+    <%= form_with url: credit_coins_admin_user_path(@user), scope: :credit, class: "admin-form" do |form| %>
+      <div class="field">
+        <%= form.label :amount, "Betrag in Coins" %>
+        <%= form.number_field :amount, value: @credit_amount, required: true, min: 1, max: User::MAX_COINS - @user.coins, step: 1, placeholder: "Zum Beispiel 500", disabled: @user.coins == User::MAX_COINS %>
+      </div>
+      <div class="field">
+        <%= form.label :reason, "Begründung (optional)" %>
+        <%= form.text_field :reason, value: @credit_reason, maxlength: 250, placeholder: "Zum Beispiel Gewinn eines Wettbewerbs" %>
+      </div>
+      <p class="admin-note">Der Betrag wird zum vorhandenen Guthaben addiert. Es entstehen neue Coins; dein eigenes Guthaben wird dafür nicht belastet. Jede Gutschrift wird protokolliert.</p>
+      <% if @user.coins == User::MAX_COINS %><p class="muted">Dieses Konto hat das Guthabenlimit erreicht.</p><% end %>
+      <div class="admin-form-actions"><%= form.submit "Coins gutschreiben", class: "button button-primary", disabled: @user.coins == User::MAX_COINS, data: { turbo_submits_with: "Wird gutgeschrieben …" } %></div>
+    <% end %>
+  <% end %>
 </section>

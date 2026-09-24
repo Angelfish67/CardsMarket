@@ -12,10 +12,10 @@ belegten Performance-Stand. Diese README enthält die technische Einstiegshilfe.
 - Registrierung, Login, Logout und serverseitige Sitzungen.
 - 1.000 Start-Coins, einmaliges kostenloses Starter-Pack mit drei Karten und weitere konfigurierbare Packs.
 - Kartentypen mit fünf Seltenheitsstufen und optionalem HTTPS-Bildlink; einzelne Karten mit Rank E bis SS.
-- Inventar und eigene Kartendetails mit Rank-Pulls und den letzten zehn eigenen Pulls je Karte.
+- Inventar mit auf- und absteigender Sortierung nach Ziehdatum, Name, Seltenheit, Rank oder Kartenwert; eigene Kartendetails mit Rank-Pulls und den letzten zehn eigenen Pulls je Karte.
 - Eigene Verkaufspreise, Kaufbestätigung mit Karten- und Guthabendetails, Kauf-Fehleransicht und Zurückziehen; Filter nach Name, Seltenheit und Rank.
 - Live-Verkaufsnachrichten und Entfernung verkaufter oder zurückgezogener Angebote über Action Cable.
-- Admin-Panel mit Policy-Klassen für Katalog, Rollen, Kontosperren, Angebotsmoderation und Änderungsprotokoll.
+- Admin-Panel mit Policy-Klassen für Katalog, Rollen, Kontosperren, Coins-Gutschriften, Angebotsmoderation und Änderungsprotokoll.
 - Direkte Aktivierung/Deaktivierung von Kartentypen; Löschen nur ohne vorhandene Karten dieses Typs.
 
 Ein deaktivierter Kartentyp wird nicht mehr neu aus Packs gezogen. Bereits
@@ -102,6 +102,21 @@ aktivieren. **Bearbeiten** öffnet die Felder für Name, Beschreibung, Seltenhei
 Grundwert, Bildlink und Aktivstatus. Unbenutzte Typen können mit Bestätigung
 gelöscht werden. Mindestens ein aktiver Admin muss erhalten bleiben.
 
+## Coins im Admin-Panel vergeben
+
+Unter **Admin → Benutzer → Coins vergeben** das gewünschte Konto auswählen und
+einen positiven Betrag in ganzen Coins eintragen. Eine Begründung mit maximal
+250 Zeichen ist optional. **Coins gutschreiben** addiert den Betrag zum
+bestehenden Guthaben. Dabei entstehen neue virtuelle Coins; das Konto des
+ausführenden Admins wird nicht belastet. Auch das eigene Konto kann Coins erhalten.
+
+Nur aktive Admins dürfen Gutschriften ausführen. Betrag, Guthaben vorher/nachher,
+Zielkonto, ausführender Admin und Begründung werden im Änderungsprotokoll erfasst.
+Gutschrift und Protokolleintrag werden gemeinsam gespeichert oder gemeinsam
+zurückgerollt. Gleichzeitige Gutschriften werden über Datenbanksperren abgesichert.
+Das Guthaben darf höchstens 2.147.483.647 Coins betragen.
+Empfänger sehen ihr neues Guthaben beim nächsten Laden der Seite.
+
 ## Wichtige Seiten und Routen
 
 | Methode und Pfad | Funktion |
@@ -121,6 +136,7 @@ gelöscht werden. Mindestens ein aktiver Admin muss erhalten bleiben.
 | `POST /market_offers/:id/purchase` | Angebot kaufen |
 | `DELETE /market_offers/:id` | Eigenes Angebot zurückziehen |
 | `GET /admin` | Admin-Übersicht |
+| `POST /admin/users/:id/credit_coins` | Coins gutschreiben (nur Admins) |
 | `/cable` | WebSocket-Endpunkt |
 | `GET /up` | Rails-Healthcheck |
 

@@ -2,6 +2,12 @@
 <div class="page-heading"><div><span class="eyebrow">DEINE PERSÖNLICHE COLLECTION</span><h1>Dein Inventar.</h1><p class="muted">Einzigartige Charaktere. Zu hundert Prozent deine Sammlung.</p></div><span class="badge"><%= pluralize(@cards.size, "KARTE", "KARTEN") %></span></div>
 <% if @cards.any? %>
   <div class="info-banner"><span aria-hidden="true">✦</span><p>Rank-Pulls kosten den Grundwert der Karte. Dein Rank kann steigen oder gleich bleiben, aber nicht sinken. Auch bei gleichem Rank werden die Coins verbraucht. SS ist das Maximum.</p></div>
+  <%= form_with url: inventory_index_path, method: :get, class: "market-filters", aria: { label: "Inventar sortieren" } do |form| %>
+    <div class="field"><%= form.label :sort, "Sortieren nach" %><%= form.select :sort, InventoryController::SORT_OPTIONS, selected: @sort %></div>
+    <div class="field"><%= form.label :direction, "Reihenfolge" %><%= form.select :direction, [["Absteigend ↓", "desc"], ["Aufsteigend ↑", "asc"]], selected: @direction %></div>
+    <%= form.submit "Sortieren", class: "button button-primary" %>
+    <%= link_to "Zurücksetzen", inventory_index_path, class: "button button-outline" if @sort != "created_at" || @direction != "desc" %>
+  <% end %>
   <div class="collection-grid">
     <% @cards.each do |card| %>
       <div class="inventory-card">
