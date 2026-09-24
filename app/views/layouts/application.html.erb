@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="de">
   <head>
-    <title><%= content_for(:title) || "Brainrot Market — Sammeln. Handeln. Brainrot." %></title>
+    <title><%= content_for(:title) || "Cards Market — Sammeln. Tauschen. Entdecken." %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="theme-color" content="#f5f4f0">
     <%= csrf_meta_tags %>
@@ -15,9 +15,9 @@
   <body>
     <a href="#main-content" class="skip-link">Zum Inhalt</a>
     <header class="site-header">
-      <%= link_to root_path, class: "brand", aria: { label: "Brainrot Market Startseite" } do %>
-        <span class="brand-mark" aria-hidden="true">b.</span>
-        <span>brainrot<span class="brand-sub">market</span></span>
+      <%= link_to root_path, class: "brand", aria: { label: "Cards Market Startseite" } do %>
+        <span class="brand-mark" aria-hidden="true">c.</span>
+        <span>cards<span class="brand-sub">market</span></span>
       <% end %>
       <% if authenticated? %>
         <nav class="main-nav" aria-label="Hauptnavigation">
@@ -48,7 +48,7 @@
     <% end %>
     <main id="main-content" class="page-shell"><%= yield %></main>
     <footer class="site-footer">
-      <span>brainrot market <span aria-hidden="true">✳</span></span>
+      <span>cards market <span aria-hidden="true">✳</span></span>
       <span>Ein bisschen seltsam. Ziemlich sammelbar.</span>
       <span>Collect the unexpected.</span>
     </footer>

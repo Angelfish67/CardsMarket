@@ -1,4 +1,4 @@
-# Brainrot Market
+# Cards Market
 
 Virtueller Sammelkarten-Marktplatz von Samira Tesan. Benutzer ziehen Karten aus
 Packs, verwalten ihre Sammlung, verbessern Ranks und handeln mit virtuellen Coins.
@@ -246,3 +246,11 @@ Für bestehende Installationen ist `bin/rails db:migrate` notwendig. Bei einem
 Deployment müssen sowohl Datenbank als auch der konfigurierte Dateispeicher
 dauerhaft erhalten und gesichert werden. Die aktuelle Konfiguration verwendet
 auch in Produktion lokalen Disk-Speicher.
+
+## Projektname
+
+Die Anwendung heißt **Cards Market**, die Rails-Anwendungsklasse ist
+`CardsMarket::Application`. Vorhandene Datenbanknamen, Datenbank-Zugangsdaten,
+das Storage-Volume und die internen Modelle behalten ihre bisherigen technischen
+Bezeichnungen, damit vorhandene Konten, Karten und Uploads weiterhin verfügbar
+sind. Der lokale Projektordner kann weiterhin `brainrot_market` heißen.

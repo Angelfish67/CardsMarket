@@ -5,7 +5,7 @@
   <section class="card-detail-panel">
     <span class="eyebrow">DEINE KARTE · #<%= @card.id %></span>
     <h1><%= @card.brainrot_type.name %></h1>
-    <p class="muted"><%= @card.brainrot_type.description.presence || "Ein Teil deiner Brainrot-Sammlung." %></p>
+    <p class="muted"><%= @card.brainrot_type.description.presence || "Ein Teil deiner Kartensammlung." %></p>
     <dl class="card-facts">
       <div><dt>Seltenheit</dt><dd><%= @card.brainrot_type.rarity.humanize %></dd></div>
       <div><dt>Rank</dt><dd><%= @card.rank.name %> · ×<%= @card.rank.multiplier %></dd></div>

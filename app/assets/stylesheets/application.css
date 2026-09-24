@@ -1,4 +1,4 @@
-/* Brainrot Market: warm paper, violet ink and collectible color. No external assets. */
+/* Cards Market: warm paper, violet ink and collectible color. No external assets. */
 :root{--paper:#f5f4f0;--ink:#25232d;--muted:#716d7d;--purple:#6942de;--purple-dark:#5130b7;--line:#e4e1ea;--mint:#dbf3ba;--lavender:#e6dffd;--peach:#ffe0cc;--white:#fff;--radius:24px}
 *{box-sizing:border-box}
 body{margin:0;background:var(--paper);color:var(--ink);font-family:Inter,"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}

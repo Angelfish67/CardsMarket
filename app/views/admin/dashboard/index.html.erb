@@ -1,4 +1,4 @@
-<% content_for :title, "Admin — Brainrot Market" %>
+<% content_for :title, "Admin — Cards Market" %>
 <%= render "admin/shared/nav" %>
 <div class="page-heading"><div><h1>Alles im Blick.</h1><p class="muted">Verwalte den Katalog, die Community und den Marktplatz.</p></div><span class="admin-badge">Verwaltung</span></div>
 <div class="admin-stats"><% @counts.each do |label, count| %><div class="admin-stat"><span><%= label %></span><strong><%= number_with_delimiter(count) %></strong></div><% end %></div>

@@ -14,7 +14,7 @@
     </div>
     <div class="field">
       <%= form.label :image_url, "Alternativer Bildlink (optional)" %>
-      <%= form.url_field :image_url, placeholder: "https://beispiel.ch/brainrot.png", maxlength: 2048,
+      <%= form.url_field :image_url, placeholder: "https://beispiel.ch/karte.png", maxlength: 2048,
         data: { card_image_target: "input", action: "input->card-image#preview change->card-image#preview" },
         aria: { describedby: "card-image-hint" } %>
       <small id="card-image-hint" class="muted">Dieser HTTPS-Link wird verwendet, wenn kein Upload gespeichert ist. Ohne Bild erscheint die Ersatzgrafik. Nach einem Formularfehler bitte die Datei erneut auswählen.</small>

@@ -1,11 +1,11 @@
-<% content_for :title, "Marktplatz — Brainrot Market" %>
+<% content_for :title, "Marktplatz — Cards Market" %>
 <div class="page-heading">
   <div><span class="eyebrow">VON SAMMLERN. FÜR SAMMLER.</span><h1>Der Marktplatz.</h1><p class="muted">Neue Charaktere suchen eine neue Sammlung.</p></div>
   <%= link_to "Eigene Karte verkaufen ↗", inventory_index_path, class: "button button-primary" %>
 </div>
 <div class="info-banner"><span aria-hidden="true">↔</span><p>Finde deinen nächsten Favoriten oder biete Karten aus deinem Inventar an. Beim Kauf gehen die Coins direkt an den Verkäufer.</p></div>
 <%= form_with url: marketplace_index_path, method: :get, class: "market-filters", role: "search" do |form| %>
-  <div class="field"><%= form.label :q, "Kartenname" %><%= form.search_field :q, value: @query, maxlength: 100, placeholder: "Brainrot suchen …" %></div>
+  <div class="field"><%= form.label :q, "Kartenname" %><%= form.search_field :q, value: @query, maxlength: 100, placeholder: "Karte suchen …" %></div>
   <div class="field"><%= form.label :rarity, "Seltenheit" %><%= form.select :rarity, [["Alle Seltenheiten", ""]] + BrainrotType.rarities.keys.map { |r| [r.humanize, r] }, selected: @rarity %></div>
   <div class="field"><%= form.label :rank, "Rank" %><%= form.select :rank, [["Alle Ranks", ""]] + Rank::NAMES.map { |r| [r, r] }, selected: @rank %></div>
   <%= form.submit "Filtern", class: "button button-primary" %>

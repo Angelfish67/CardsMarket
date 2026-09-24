@@ -1,14 +1,14 @@
-<% content_for :title, "Deine Übersicht — Brainrot Market" %>
+<% content_for :title, "Deine Übersicht — Cards Market" %>
 <div class="page-heading"><div><span class="eyebrow">DEIN PERSÖNLICHER KOSMOS</span><h1>Hallo, <%= @user.username %>!</h1><p class="muted">Schön, dass du da bist. Mach die Sammlung zu deiner.</p></div><span class="badge">TRADER CLUB <span aria-hidden="true">✳</span></span></div>
 <section class="dashboard-hero">
-  <div class="hero-copy"><span class="eyebrow">KLEINE KARTEN. GROSSE PERSÖNLICHKEIT.</span><h2>Normal kann<br><em>jeder sammeln.</em></h2><p>Entdecke deinen nächsten Lieblings-Brainrot. <br>Deine Sammlung ist erst der Anfang.</p><%= link_to "Meine Sammlung ↗", inventory_index_path, class: "button button-dark" %></div>
+  <div class="hero-copy"><span class="eyebrow">KLEINE KARTEN. GROSSE PERSÖNLICHKEIT.</span><h2>Normal kann<br><em>jeder sammeln.</em></h2><p>Entdecke deine nächste Lieblingskarte. <br>Deine Sammlung ist erst der Anfang.</p><%= link_to "Meine Sammlung ↗", inventory_index_path, class: "button button-dark" %></div>
   <%= render "shared/showcase" %>
 </section>
 <dl class="stats-grid">
   <div class="stat-card"><div class="stat-icon mint" aria-hidden="true">✦</div><div><dt>Dein Guthaben</dt><dd><span data-wallet-user="<%= @user.id %>" data-wallet-updated-at="<%= @user.updated_at.utc.iso8601(6) %>"><%= @user.coins %></span> Coins</dd></div><span class="stat-note">Für deine nächsten Entdeckungen</span></div>
   <div class="stat-card"><div class="stat-icon lavender" aria-hidden="true">▧</div><div><dt>Deine Sammlung</dt><dd><%= pluralize(@user.brainrot_cards.count, "Karte", "Karten") %></dd></div><%= link_to "Ansehen ↗", inventory_index_path, class: "text-link" %></div>
 </dl>
-<div class="section-heading"><h2>Dein nächster Move</h2><span class="muted">Drei Wege. Ein bisschen mehr Brainrot.</span></div>
+<div class="section-heading"><h2>Dein nächster Move</h2><span class="muted">Drei Wege zu deiner nächsten Lieblingskarte.</span></div>
 <div class="action-grid">
   <%= link_to inventory_index_path, class: "action-card" do %><span class="action-number">01 / SAMMELN</span><span class="action-symbol lavender" aria-hidden="true">▧</span><h3>Dein Inventar <span>↗</span></h3><p>Alle deine Karten. Alle deine Favoriten. Alles an einem Ort.</p><% end %>
   <%= link_to marketplace_index_path, class: "action-card" do %><span class="action-number">02 / ENTDECKEN</span><span class="action-symbol mint" aria-hidden="true">↔</span><h3>Der Marktplatz <span>↗</span></h3><p>Schau dich um und entdecke die Angebote anderer Sammler.</p><% end %>

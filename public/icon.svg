@@ -1,3 +1,6 @@
-<svg width="512" height="512" xmlns="http://www.w3.org/2000/svg">
-  <circle cx="256" cy="256" r="256" fill="red"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <rect width="512" height="512" rx="112" fill="#6942de"/>
+  <rect x="116" y="100" width="232" height="312" rx="28" fill="#e6dffd" transform="rotate(-12 232 256)"/>
+  <rect x="166" y="100" width="232" height="312" rx="28" fill="#fff" transform="rotate(8 282 256)"/>
+  <path d="M322 201c-13-14-29-21-48-21-43 0-74 32-74 76s31 76 74 76c19 0 35-7 48-21" fill="none" stroke="#6942de" stroke-width="28" stroke-linecap="round"/>
 </svg>

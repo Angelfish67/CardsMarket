@@ -1,4 +1,4 @@
-<% content_for :title, "#{catalog_name} verwalten — Brainrot Market" %>
+<% content_for :title, "#{catalog_name} verwalten — Cards Market" %>
 <%= render "admin/shared/nav" %>
 <div class="page-heading"><div><h1><%= catalog_name %>.</h1><p class="muted">Spielwerte pflegen und Änderungen nachvollziehbar speichern.</p></div><% if admin_policy(controller.class::MODEL.new).create? %><%= link_to "Neuer Eintrag +", new_polymorphic_path([:admin, controller.class::MODEL]), class: "button button-primary" %><% end %></div>
 <p class="admin-note"><%= controller.class::MODEL == Rank ? "Die Rank-Namen bleiben fest. Multiplikatoren ändern den Wert vorhandener Karten; Gewichte gelten für zukünftige Ziehungen." : "Deaktivierte Einträge werden nicht mehr in neuen Packs angeboten oder gezogen. Bestehende Karten und die Historie bleiben erhalten." %></p>

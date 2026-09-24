@@ -1,5 +1,5 @@
-<% content_for :title, "Packs — Brainrot Market" %>
-<div class="page-heading"><div><span class="eyebrow">EIN BISSCHEN ZUFALL. VIEL CHARAKTER.</span><h1>Expect the unexpected.</h1><p class="muted">Dein nächster Lieblings-Brainrot könnte hier drin sein.</p></div><span class="badge">PACK STATION <span aria-hidden="true">✳</span></span></div>
+<% content_for :title, "Packs — Cards Market" %>
+<div class="page-heading"><div><span class="eyebrow">EIN BISSCHEN ZUFALL. VIEL CHARAKTER.</span><h1>Expect the unexpected.</h1><p class="muted">Deine nächste Lieblingskarte könnte hier drin sein.</p></div><span class="badge">PACK STATION <span aria-hidden="true">✳</span></span></div>
 <% if !@starter_opened && @packs.any?(&:starter?) %>
   <section id="starter-pack" class="starter-welcome"><span class="eyebrow">DEIN START IN DIE SAMMLUNG</span><h2>Deine ersten 3 Karten warten.</h2><p>Öffne unten dein kostenloses Starter-Pack. Du erhältst drei zufällige Karten mit eigenen Ranks – einmal pro Konto.</p><%= link_to "Später öffnen · Zur Übersicht →", root_path, class: "text-link" %></section>
 <% end %>
@@ -14,7 +14,7 @@
 <% if @packs.any? %>
   <div class="pack-grid"><% @packs.each do |pack| %>
     <article class="pack-card">
-      <div class="pack-art <%= "pack-starter" if pack.starter? %>"><span class="pack-ribbon"><%= pack.starter? ? "DEIN ERSTER DROP" : "DEIN NÄCHSTER DROP" %></span><div class="booster"><span>BRAINROT<br>MARKET</span><span class="booster-star" aria-hidden="true">✳</span><span>EXPECT<br>THE UNEXPECTED.</span></div></div>
+      <div class="pack-art <%= "pack-starter" if pack.starter? %>"><span class="pack-ribbon"><%= pack.starter? ? "DEIN ERSTER DROP" : "DEIN NÄCHSTER DROP" %></span><div class="booster"><span>CARDS<br>MARKET</span><span class="booster-star" aria-hidden="true">✳</span><span>EXPECT<br>THE UNEXPECTED.</span></div></div>
       <div class="pack-body">
         <h2><%= pack.name %></h2>
         <p class="muted"><%= pluralize(pack.starter? ? 3 : pack.cards_count, "Karte", "Karten") %> · Zufällige Charaktere &amp; Ranks</p>

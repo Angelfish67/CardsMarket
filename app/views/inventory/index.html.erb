@@ -1,4 +1,4 @@
-<% content_for :title, "Dein Inventar — Brainrot Market" %>
+<% content_for :title, "Dein Inventar — Cards Market" %>
 <div class="page-heading"><div><span class="eyebrow">DEINE PERSÖNLICHE COLLECTION</span><h1>Dein Inventar.</h1><p class="muted">Einzigartige Charaktere. Zu hundert Prozent deine Sammlung.</p></div><span class="badge"><%= pluralize(@cards.size, "KARTE", "KARTEN") %></span></div>
 <% if @cards.any? %>
   <div class="info-banner"><span aria-hidden="true">✦</span><p>Rank-Pulls kosten den Grundwert der Karte. Dein Rank kann steigen oder gleich bleiben, aber nicht sinken. Auch bei gleichem Rank werden die Coins verbraucht. SS ist das Maximum.</p></div>

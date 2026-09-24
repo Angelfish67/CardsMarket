@@ -1,4 +1,4 @@
-<% content_for :title, "Anmelden — Brainrot Market" %>
+<% content_for :title, "Anmelden — Cards Market" %>
 <section class="auth-layout">
   <%= render "shared/auth_intro" %>
   <div class="auth-panel">
@@ -17,6 +17,6 @@
       <%= form.submit "Anmelden", class: "button button-primary button-full" %>
     <% end %>
     <p class="auth-switch">Noch nicht dabei? <%= link_to "Konto erstellen ↗", new_registration_path %></p>
-    <div class="auth-footnote"><span aria-hidden="true">✦</span> Dein nächster Lieblings-Brainrot wartet schon.</div>
+    <div class="auth-footnote"><span aria-hidden="true">✦</span> Deine nächste Lieblingskarte wartet schon.</div>
   </div>
 </section>
