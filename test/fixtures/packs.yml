@@ -1,0 +1,25 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  name: MyString
+  price: 1
+  cards_count: 1
+  starter: false
+
+two:
+  name: MyString
+  price: 1
+  cards_count: 1
+  starter: false
+
+starter:
+  name: Starter Pack
+  price: 0
+  cards_count: 3
+  starter: true
+
+beginner:
+  name: Anfänger-Pack
+  price: 100
+  cards_count: 3
+  starter: false

@@ -1,0 +1,24 @@
+<% content_for :title, "#{catalog_name} bearbeiten — Brainrot Market" %>
+<%= render "admin/shared/nav" %>
+<div class="page-heading"><div><h1><%= @record.new_record? ? "Neuer Eintrag." : "#{@record.name} bearbeiten." %></h1><p class="muted"><%= catalog_name %> · Änderungen werden im Protokoll gespeichert.</p></div></div>
+<section class="admin-panel admin-form-panel">
+<%= render "admin/shared/errors", record: @record %>
+<%= form_with model: [:admin, @record], class: "admin-form" do |form| %>
+  <% unless @record.is_a?(Rank) %><div class="field"><%= form.label :name, "Name" %><%= form.text_field :name, required: true, maxlength: 100 %></div><% end %>
+  <% if @record.is_a?(BrainrotType) %>
+    <%= render "admin/catalog/image_field", form: form, record: @record %>
+    <div class="field"><%= form.label :description, "Beschreibung" %><%= form.text_area :description, rows: 4, maxlength: 2000 %></div>
+    <div class="admin-form-grid"><div class="field"><%= form.label :rarity, "Seltenheit" %><%= form.select :rarity, BrainrotType.rarities.keys.map { |r| [r.humanize, r] } %></div><div class="field"><%= form.label :base_value, "Grundwert in Coins" %><%= form.number_field :base_value, required: true, min: 1, max: User::MAX_COINS %></div></div>
+    <p class="admin-note">Ziehchancen nach Seltenheit: Common 60 %, Uncommon 25 %, Rare 10 %, Epic 4 %, Legendary 1 %. Nur verfügbare Stufen zählen; innerhalb einer Stufe sind alle aktiven Kartentypen gleich wahrscheinlich. Seltenheit und Rank sind unabhängig.</p>
+    <p class="admin-note">Bild, Seltenheit und Grundwert gelten für alle Karten dieses Typs, auch bereits gezogene. Der Grundwert bestimmt außerdem die Kosten für Rank-Pulls.</p>
+  <% elsif @record.is_a?(Pack) %>
+    <div class="admin-form-grid"><div class="field"><%= form.label :price, "Preis in Coins" %><%= form.number_field :price, required: true, min: 0, max: User::MAX_COINS %></div><div class="field"><%= form.label :cards_count, "Karten pro Pack" %><%= form.number_field :cards_count, required: true, min: 1, max: 100 %></div></div>
+    <% if @record.new_record? %><label class="admin-check"><%= form.check_box :starter %> Einmaliges Starter-Pack (kostenlos, genau 3 Karten)</label><% else %><p class="admin-note"><%= @record.starter? ? "Starter-Pack: kostenlos, 3 Karten, einmal pro Konto." : "Reguläres Pack: bei ausreichendem Guthaben wiederholt kaufbar." %> Der Pack-Typ kann nach dem Erstellen nicht verändert werden.</p><% end %>
+  <% else %>
+    <div class="admin-form-grid"><div class="field"><%= form.label :multiplier, "Wert-Multiplikator" %><%= form.number_field :multiplier, required: true, min: 0.01, max: 9999.99, step: 0.01 %></div><div class="field"><%= form.label :weight, "Relatives Ziehgewicht" %><%= form.number_field :weight, required: true, min: 1, max: User::MAX_COINS %></div></div>
+    <p class="admin-note">Höheres Gewicht bedeutet eine höhere Ziehchance. Der Multiplikator gilt auch für vorhandene Karten. Rank-Namen und Reihenfolge bleiben fest.</p>
+  <% end %>
+  <% if @record.respond_to?(:active) %><label class="admin-check"><%= form.check_box :active %> Für neue Packs und Ziehungen verfügbar</label><% end %>
+  <div class="admin-form-actions"><%= form.submit "Speichern", class: "button button-primary" %><%= link_to "Abbrechen", catalog_path, class: "button button-outline" %></div>
+<% end %>
+</section>

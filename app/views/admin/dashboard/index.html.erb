@@ -1,0 +1,10 @@
+<% content_for :title, "Admin — Brainrot Market" %>
+<%= render "admin/shared/nav" %>
+<div class="page-heading"><div><h1>Alles im Blick.</h1><p class="muted">Verwalte den Katalog, die Community und den Marktplatz.</p></div><span class="admin-badge">Verwaltung</span></div>
+<div class="admin-stats"><% @counts.each do |label, count| %><div class="admin-stat"><span><%= label %></span><strong><%= number_with_delimiter(count) %></strong></div><% end %></div>
+<div class="admin-shortcuts">
+  <%= link_to admin_brainrot_types_path, class: "admin-shortcut" do %><span>✦</span><h2>Sammlung gestalten</h2><p>Kartentypen und Spielwerte bearbeiten. Packs für neue Ziehungen freigeben.</p><strong>Katalog öffnen ↗</strong><% end %>
+  <%= link_to admin_users_path, class: "admin-shortcut" do %><span>◎</span><h2>Community verwalten</h2><p>Benutzer suchen, Rollen vergeben und Konten sperren oder wieder freigeben.</p><strong>Benutzer öffnen ↗</strong><% end %>
+  <%= link_to admin_market_offers_path, class: "admin-shortcut" do %><span>↔</span><h2>Marktplatz moderieren</h2><p>Aktive Angebote prüfen und bei Bedarf zurückziehen. Karten bleiben beim Besitzer.</p><strong>Angebote öffnen ↗</strong><% end %>
+</div>
+<section class="admin-panel"><div class="section-heading admin-pad"><h2>Letzte Änderungen</h2><%= link_to "Ganzes Protokoll ↗", admin_activities_path, class: "text-link" %></div><%= render "admin/shared/activities", activities: @activities %></section>

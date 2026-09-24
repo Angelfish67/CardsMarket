@@ -1,0 +1,7 @@
+<% if @page > 1 || @has_next_page %>
+<nav class="market-pagination" aria-label="Weitere Einträge">
+  <%= link_to "← Zurück", url_for(page: @page - 1, q: params[:q]), class: "button button-outline" if @page > 1 %>
+  <span>Seite <%= @page %></span>
+  <%= link_to "Weiter →", url_for(page: @page + 1, q: params[:q]), class: "button button-outline" if @has_next_page %>
+</nav>
+<% end %>

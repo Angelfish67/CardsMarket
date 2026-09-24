@@ -1,0 +1,12 @@
+<% if activities.empty? %>
+  <p class="muted admin-pad">Hier erscheinen die nächsten Änderungen der Administration.</p>
+<% else %>
+<div class="admin-table-wrap"><table class="admin-table">
+  <thead><tr><th>Zeitpunkt</th><th>Admin</th><th>Aktion</th><th>Eintrag</th><th>Änderungen</th></tr></thead>
+  <tbody><% activities.each do |activity| %><tr>
+    <td><%= activity.created_at.strftime("%d.%m.%Y %H:%M UTC") %></td><td><%= activity.admin.username %></td>
+    <td><%= admin_action_label(activity.action) %></td><td><%= admin_subject_label(activity.subject_type) %> #<%= activity.subject_id %></td>
+    <td><details><summary>Ansehen</summary><dl class="admin-changes"><% activity.details.each do |field, values| %><dt><%= admin_field_label(field) %></dt><dd><%= Array(values).map { |value| admin_value(value) }.join(" → ") %></dd><% end %></dl></details></td>
+  </tr><% end %></tbody>
+</table></div>
+<% end %>

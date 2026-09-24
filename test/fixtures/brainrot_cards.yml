@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  brainrot_type: one
+  rank: one
+  pack_opening: one
+
+two:
+  user: two
+  brainrot_type: two
+  rank: two
+  pack_opening: two

@@ -1,0 +1,7 @@
+<% content_for :head do %><meta name="turbo-cache-control" content="no-cache"><% end %>
+<div class="admin-heading"><span class="eyebrow">BRAINROT CONTROL ROOM</span><span class="admin-badge">Admin · <%= Current.user.username %></span></div>
+<nav class="admin-nav" aria-label="Administration">
+  <% [["Übersicht", admin_root_path], ["Kartentypen", admin_brainrot_types_path], ["Packs", admin_packs_path], ["Ranks", admin_ranks_path], ["Benutzer", admin_users_path], ["Angebote", admin_market_offers_path], ["Protokoll", admin_activities_path]].each do |label, path| %>
+    <%= link_to label, path, class: ("is-active" if request.path == path || (path != admin_root_path && request.path.start_with?(path + "/"))), aria: { current: ("page" if request.path == path) } %>
+  <% end %>
+</nav>

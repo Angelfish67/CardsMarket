@@ -1,0 +1,7 @@
+<% content_for :title, "Angebote moderieren — Brainrot Market" %>
+<%= render "admin/shared/nav" %>
+<div class="page-heading"><div><h1>Marktplatz moderieren.</h1><p class="muted">Entfernte Angebote verschwinden live bei allen Nutzern. Die Karte bleibt beim Besitzer.</p></div></div>
+<div class="admin-panel admin-table-wrap"><table class="admin-table"><thead><tr><th>Karte</th><th>Verkäufer</th><th>Preis</th><th>Aktion</th></tr></thead><tbody>
+<% @offers.each do |offer| %><tr><td><strong><%= offer.brainrot_card.brainrot_type.name %></strong><small>Angebot #<%= offer.id %></small></td><td><%= offer.user.username %></td><td><%= offer.price %> Coins</td><td><%= button_to "Angebot entfernen", admin_market_offer_path(offer), method: :delete, class: "button button-outline", form: { data: { turbo_confirm: "Dieses Angebot vom Marktplatz entfernen? Die Karte bleibt beim Verkäufer." } } if admin_policy(offer).moderate? %></td></tr><% end %>
+</tbody></table><% if @offers.empty? %><p class="admin-pad muted">Keine aktiven Angebote vorhanden.</p><% end %></div>
+<%= render "admin/shared/pagination" %>

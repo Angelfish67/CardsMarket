@@ -1,0 +1,34 @@
+<% content_for :title, "Packs — Brainrot Market" %>
+<div class="page-heading"><div><span class="eyebrow">EIN BISSCHEN ZUFALL. VIEL CHARAKTER.</span><h1>Expect the unexpected.</h1><p class="muted">Dein nächster Lieblings-Brainrot könnte hier drin sein.</p></div><span class="badge">PACK STATION <span aria-hidden="true">✳</span></span></div>
+<% if !@starter_opened && @packs.any?(&:starter?) %>
+  <section id="starter-pack" class="starter-welcome"><span class="eyebrow">DEIN START IN DIE SAMMLUNG</span><h2>Deine ersten 3 Karten warten.</h2><p>Öffne unten dein kostenloses Starter-Pack. Du erhältst drei zufällige Karten mit eigenen Ranks – einmal pro Konto.</p><%= link_to "Später öffnen · Zur Übersicht →", root_path, class: "text-link" %></section>
+<% end %>
+<div class="info-banner"><span aria-hidden="true">✦</span><p>Dein Starter-Pack ist einmalig kostenlos. Weitere Packs kannst du mit Coins öffnen. Jede Karte erhält einen zufälligen Rank; doppelte Charaktere sind möglich.</p></div>
+<% if @rarity_chances.any? %>
+  <details class="rarity-guide"><summary>Welche Karten kann ich ziehen?</summary>
+    <p>Die Seltenheit wird zuerst gezogen, danach eine gleich zufällige Karte dieser Stufe. Der Rank E–SS wird unabhängig davon gezogen.</p>
+    <div class="rarity-odds"><% @rarity_chances.each do |rarity, chance| %><span class="rarity-chip rarity-<%= rarity %>"><strong><%= rarity.humanize %></strong><span><%= number_with_precision(chance, precision: 1, strip_insignificant_zeros: true) %> %</span></span><% end %></div>
+    <p class="muted">Aktuelle Chancen für den verfügbaren Katalog. Jede Karte wird unabhängig gezogen; doppelte Charaktere sind möglich.</p>
+  </details>
+<% end %>
+<% if @packs.any? %>
+  <div class="pack-grid"><% @packs.each do |pack| %>
+    <article class="pack-card">
+      <div class="pack-art <%= "pack-starter" if pack.starter? %>"><span class="pack-ribbon"><%= pack.starter? ? "DEIN ERSTER DROP" : "DEIN NÄCHSTER DROP" %></span><div class="booster"><span>BRAINROT<br>MARKET</span><span class="booster-star" aria-hidden="true">✳</span><span>EXPECT<br>THE UNEXPECTED.</span></div></div>
+      <div class="pack-body">
+        <h2><%= pack.name %></h2>
+        <p class="muted"><%= pluralize(pack.starter? ? 3 : pack.cards_count, "Karte", "Karten") %> · Zufällige Charaktere &amp; Ranks</p>
+        <div class="pack-price"><strong><%= pack.price.zero? ? "Kostenlos" : "#{pack.price} Coins" %></strong><span class="coming-soon"><%= pack.starter? ? "EINMAL PRO KONTO" : "BELIEBIG OFT" %></span></div>
+        <% if pack.starter? && @starter_opened %>
+          <button class="button button-disabled button-full" disabled>Starter-Pack bereits geöffnet</button>
+        <% elsif Current.user.coins < pack.price %>
+          <button class="button button-disabled button-full" disabled>Nicht genügend Coins</button>
+        <% else %>
+          <%= button_to(pack.starter? ? "Starter-Pack kostenlos öffnen" : "Für #{pack.price} Coins öffnen", open_pack_path(pack), method: :post, class: "button button-primary button-full", data: { turbo_submits_with: "Wird geöffnet …" }) %>
+        <% end %>
+      </div>
+    </article>
+  <% end %></div>
+<% else %>
+  <section class="empty-state"><div class="empty-icon peach" aria-hidden="true">✳</div><h2>Neue Überraschungen kommen.</h2><p>Aktuell sind noch keine Packs verfügbar.</p><%= link_to "Zur Übersicht", root_path, class: "button button-primary" %></section>
+<% end %>

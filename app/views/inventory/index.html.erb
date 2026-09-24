@@ -1,0 +1,39 @@
+<% content_for :title, "Dein Inventar — Brainrot Market" %>
+<div class="page-heading"><div><span class="eyebrow">DEINE PERSÖNLICHE COLLECTION</span><h1>Dein Inventar.</h1><p class="muted">Einzigartige Charaktere. Zu hundert Prozent deine Sammlung.</p></div><span class="badge"><%= pluralize(@cards.size, "KARTE", "KARTEN") %></span></div>
+<% if @cards.any? %>
+  <div class="info-banner"><span aria-hidden="true">✦</span><p>Rank-Pulls kosten den Grundwert der Karte. Dein Rank kann steigen oder gleich bleiben, aber nicht sinken. Auch bei gleichem Rank werden die Coins verbraucht. SS ist das Maximum.</p></div>
+  <div class="collection-grid">
+    <% @cards.each do |card| %>
+      <div class="inventory-card">
+        <%= link_to brainrot_card_path(card), class: "card-detail-link", aria: { label: "#{card.brainrot_type.name}: Details und Rank-Pull" } do %>
+          <%= render "shared/brainrot_card", card: card %>
+        <% end %>
+        <div class="inventory-sale-panel">
+          <% if offer = @active_offers[card.id] %>
+            <p class="listed-label">Angeboten für <strong><%= offer.price %> Coins</strong></p>
+            <%= link_to "Zum Angebot ↗", marketplace_index_path(anchor: dom_id(offer)), class: "text-link" %>
+            <%= button_to "Angebot zurückziehen", market_offer_path(offer, return_to: "inventory"), method: :delete, class: "button button-outline button-full", data: { turbo_submits_with: "Wird zurückgezogen …" } %>
+          <% else %>
+            <%= link_to "Karte verkaufen ↗", new_brainrot_card_market_offer_path(card), class: "button button-outline button-full" %>
+          <% end %>
+        </div>
+        <div class="rank-pull-panel">
+          <% if card.rank.name == "SS" %>
+            <span class="rank-max">✦ Höchster Rank erreicht</span>
+          <% elsif @active_offers.key?(card.id) %>
+            <p class="muted">Für Rank-Pulls zuerst das Verkaufsangebot zurückziehen.</p>
+          <% else %>
+            <p>Rank-Pull <strong><%= card.brainrot_type.base_value %> Coins</strong></p>
+            <% if Current.user.coins >= card.brainrot_type.base_value %>
+              <%= button_to "Rank verbessern ✦", brainrot_card_rank_pulls_path(card), method: :post, class: "button button-primary button-full", data: { turbo_submits_with: "Rank wird gezogen …" } %>
+            <% else %>
+              <button class="button button-disabled button-full" disabled>Nicht genügend Coins</button>
+            <% end %>
+          <% end %>
+        </div>
+      </div>
+    <% end %>
+  </div>
+<% else %>
+  <section class="empty-state"><div class="empty-icon lavender" aria-hidden="true">▧</div><span class="eyebrow">PLATZ FÜR DEINE FAVORITEN</span><h2>Jede Sammlung fängt klein an.</h2><p>Deine ersten drei Karten warten schon.<br>Öffne jetzt dein kostenloses Starter-Pack.</p><%= link_to "Packs entdecken ↗", packs_index_path, class: "button button-primary" %></section>
+<% end %>

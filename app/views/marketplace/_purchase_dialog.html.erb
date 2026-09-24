@@ -1,0 +1,27 @@
+<dialog class="purchase-dialog" data-purchase-confirmation-target="dialog"
+  aria-labelledby="purchase-dialog-title" aria-describedby="purchase-dialog-description"
+  data-action="close->purchase-confirmation#closed click->purchase-confirmation#backdrop">
+  <button type="button" class="purchase-dialog-close" aria-label="Dialog schließen" data-action="purchase-confirmation#cancel">×</button>
+  <span class="purchase-dialog-icon" aria-hidden="true" data-purchase-confirmation-target="icon">↔</span>
+  <span class="eyebrow">DEIN NÄCHSTER SAMMLUNGSZUGANG</span>
+  <h2 id="purchase-dialog-title" data-purchase-confirmation-target="title">Kauf bestätigen</h2>
+  <p id="purchase-dialog-description" class="muted" data-purchase-confirmation-target="description">Prüfe die Details, bevor die Karte in deine Sammlung wechselt.</p>
+  <div data-purchase-confirmation-target="details">
+    <dl class="purchase-card-details">
+      <div><dt>Karte</dt><dd data-purchase-confirmation-target="name"></dd></div>
+      <div><dt>Seltenheit</dt><dd data-purchase-confirmation-target="rarity"></dd></div>
+      <div><dt>Rank</dt><dd data-purchase-confirmation-target="rank"></dd></div>
+      <div><dt>Verkäufer</dt><dd data-purchase-confirmation-target="seller"></dd></div>
+    </dl>
+    <dl class="purchase-wallet">
+      <div><dt>Preis</dt><dd data-purchase-confirmation-target="price"></dd></div>
+      <div><dt>Dein Guthaben</dt><dd data-purchase-confirmation-target="balance"></dd></div>
+      <div class="purchase-wallet-total"><dt>Guthaben nach Kauf</dt><dd data-purchase-confirmation-target="remaining"></dd></div>
+    </dl>
+  </div>
+  <p class="purchase-error-note" data-purchase-confirmation-target="errorNote" hidden>Für diesen Kauf wurden keine Coins abgebucht.</p>
+  <div class="purchase-dialog-actions">
+    <button type="button" class="button button-primary" data-purchase-confirmation-target="confirm" data-action="purchase-confirmation#confirm">Kaufen</button>
+    <button type="button" class="button button-outline" data-purchase-confirmation-target="cancel" data-action="purchase-confirmation#cancel" autofocus>Abbrechen</button>
+  </div>
+</dialog>

@@ -1,0 +1,29 @@
+<div class="admin-image-field" data-controller="card-image" data-card-image-saved-url-value="<%= record.image.persisted? ? url_for(record.image) : "" %>">
+  <div>
+    <div class="field">
+      <%= form.label :image, "Bild vom Rechner hochladen" %>
+      <%= form.file_field :image, accept: "image/png,image/jpeg,image/webp",
+        data: { card_image_target: "file", action: "change->card-image#preview" },
+        aria: { describedby: "card-upload-hint" } %>
+      <small id="card-upload-hint" class="muted">PNG, JPG oder WebP, maximal 5 MB. Das hochgeladene Bild wird statt des Bildlinks angezeigt.</small>
+      <% if record.image.persisted? %>
+        <small>Gespeichert: <%= record.image.filename %></small>
+        <label class="admin-check"><%= check_box_tag "brainrot_type[remove_image]", "1", false, data: { card_image_target: "remove", action: "change->card-image#preview" } %> Hochgeladenes Bild entfernen</label>
+      <% end %>
+      <small class="form-errors" role="alert" data-card-image-target="error" hidden></small>
+    </div>
+    <div class="field">
+      <%= form.label :image_url, "Alternativer Bildlink (optional)" %>
+      <%= form.url_field :image_url, placeholder: "https://beispiel.ch/brainrot.png", maxlength: 2048,
+        data: { card_image_target: "input", action: "input->card-image#preview change->card-image#preview" },
+        aria: { describedby: "card-image-hint" } %>
+      <small id="card-image-hint" class="muted">Dieser HTTPS-Link wird verwendet, wenn kein Upload gespeichert ist. Ohne Bild erscheint die Ersatzgrafik. Nach einem Formularfehler bitte die Datei erneut auswählen.</small>
+    </div>
+  </div>
+  <div class="admin-image-preview" aria-label="Bildvorschau">
+    <span class="image-preview-placeholder">Bildvorschau</span>
+    <%= tag.img src: record.image.persisted? ? url_for(record.image) : record.image_url.presence,
+      alt: "Vorschau des Kartenbildes", class: "brainrot-image", referrerpolicy: "no-referrer",
+      data: { card_image_target: "image", action: "load->card-image#loaded error->card-image#failed" } %>
+  </div>
+</div>

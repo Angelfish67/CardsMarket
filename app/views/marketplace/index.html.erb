@@ -1,0 +1,45 @@
+<% content_for :title, "Marktplatz — Brainrot Market" %>
+<div class="page-heading">
+  <div><span class="eyebrow">VON SAMMLERN. FÜR SAMMLER.</span><h1>Der Marktplatz.</h1><p class="muted">Neue Charaktere suchen eine neue Sammlung.</p></div>
+  <%= link_to "Eigene Karte verkaufen ↗", inventory_index_path, class: "button button-primary" %>
+</div>
+<div class="info-banner"><span aria-hidden="true">↔</span><p>Finde deinen nächsten Favoriten oder biete Karten aus deinem Inventar an. Beim Kauf gehen die Coins direkt an den Verkäufer.</p></div>
+<%= form_with url: marketplace_index_path, method: :get, class: "market-filters", role: "search" do |form| %>
+  <div class="field"><%= form.label :q, "Kartenname" %><%= form.search_field :q, value: @query, maxlength: 100, placeholder: "Brainrot suchen …" %></div>
+  <div class="field"><%= form.label :rarity, "Seltenheit" %><%= form.select :rarity, [["Alle Seltenheiten", ""]] + BrainrotType.rarities.keys.map { |r| [r.humanize, r] }, selected: @rarity %></div>
+  <div class="field"><%= form.label :rank, "Rank" %><%= form.select :rank, [["Alle Ranks", ""]] + Rank::NAMES.map { |r| [r, r] }, selected: @rank %></div>
+  <%= form.submit "Filtern", class: "button button-primary" %>
+  <%= link_to "Zurücksetzen", marketplace_index_path, class: "button button-outline" if @filter_params.any? %>
+<% end %>
+<div data-controller="purchase-confirmation"
+  data-purchase-confirmation-user-id-value="<%= Current.user.id %>"
+  data-purchase-confirmation-balance-value="<%= Current.user.coins %>"
+  data-action="marketplace:offer-removed->purchase-confirmation#offerRemoved wallet:changed@window->purchase-confirmation#walletChanged turbo:before-cache@document->purchase-confirmation#beforeCache">
+<div data-controller="marketplace">
+  <div class="collection-grid" data-marketplace-target="grid" <%= "hidden" if @offers.empty? %>>
+    <% @offers.each do |offer| %>
+      <article class="offer-card" id="<%= dom_id(offer) %>" data-offer-id="<%= offer.id %>">
+        <%= render "shared/brainrot_card", card: offer.brainrot_card %>
+        <div class="offer-details"><span>Von <strong><%= offer.user.username %></strong></span><strong class="offer-price"><%= offer.price %> Coins</strong></div>
+        <% if offer.user_id == Current.user.id %>
+          <span class="own-offer-label">DEIN ANGEBOT</span>
+          <%= button_to "Angebot zurückziehen", market_offer_path(offer), method: :delete, class: "button button-outline button-full", data: { turbo_submits_with: "Wird zurückgezogen …" } %>
+        <% elsif Current.user.coins < offer.price %>
+          <button class="button button-disabled button-full" disabled>Nicht genügend Coins</button>
+        <% else %>
+          <%= button_to "Für #{offer.price} Coins kaufen", purchase_market_offer_path(offer), method: :post, class: "button button-primary button-full", data: { turbo_submits_with: "Wird gekauft …" }, form: { data: { action: "submit->purchase-confirmation#open", offer_id: offer.id, price: offer.price, name: offer.brainrot_card.brainrot_type.name, rarity: offer.brainrot_card.brainrot_type.rarity.humanize, rank: offer.brainrot_card.rank.name, seller: offer.user.username } } %>
+        <% end %>
+      </article>
+    <% end %>
+  </div>
+  <section class="empty-state" data-marketplace-target="empty" <%= "hidden" if @offers.any? %>><div class="empty-icon mint" aria-hidden="true">↔</div><span class="eyebrow">PLATZ FÜR DEIN ANGEBOT</span><h2><%= @filter_params.any? ? "Keine passenden Angebote." : "Keine aktiven Angebote auf dieser Seite." %></h2><p><%= @filter_params.any? ? "Passe deine Filter an oder setze sie zurück." : "Du kannst eigene Karten aus deinem Inventar einstellen." %></p><%= link_to "Karte verkaufen ↗", inventory_index_path, class: "button button-primary" %></section>
+</div>
+<%= render "marketplace/purchase_dialog" %>
+</div>
+<% if @page > 1 || @has_next_page %>
+  <nav class="market-pagination" aria-label="Marktplatzseiten">
+    <%= link_to "← Zurück", marketplace_index_path(@filter_params.merge(page: @page - 1)), class: "button button-outline" if @page > 1 %>
+    <span>Seite <%= @page %></span>
+    <%= link_to "Weitere Angebote →", marketplace_index_path(@filter_params.merge(page: @page + 1)), class: "button button-outline" if @has_next_page %>
+  </nav>
+<% end %>

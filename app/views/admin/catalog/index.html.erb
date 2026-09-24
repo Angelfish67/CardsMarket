@@ -1,0 +1,22 @@
+<% content_for :title, "#{catalog_name} verwalten — Brainrot Market" %>
+<%= render "admin/shared/nav" %>
+<div class="page-heading"><div><h1><%= catalog_name %>.</h1><p class="muted">Spielwerte pflegen und Änderungen nachvollziehbar speichern.</p></div><% if admin_policy(controller.class::MODEL.new).create? %><%= link_to "Neuer Eintrag +", new_polymorphic_path([:admin, controller.class::MODEL]), class: "button button-primary" %><% end %></div>
+<p class="admin-note"><%= controller.class::MODEL == Rank ? "Die Rank-Namen bleiben fest. Multiplikatoren ändern den Wert vorhandener Karten; Gewichte gelten für zukünftige Ziehungen." : "Deaktivierte Einträge werden nicht mehr in neuen Packs angeboten oder gezogen. Bestehende Karten und die Historie bleiben erhalten." %></p>
+<div class="admin-panel admin-table-wrap"><table class="admin-table">
+  <thead><tr><th>Name</th><th>Werte</th><th>Status</th><th><span class="visually-hidden">Aktionen</span></th></tr></thead>
+  <tbody><% @records.each do |record| %><tr id="<%= dom_id(record) %>">
+    <td><% if record.is_a?(BrainrotType) %><div class="admin-type-art"><%= render "shared/brainrot_art", type: record %></div><% end %><strong><%= record.name %></strong><small>#<%= record.id %></small></td>
+    <td><% case record %><% when BrainrotType %><%= record.rarity.humanize %> · <%= record.base_value %> Coins Grundwert<% when Pack %><%= record.price %> Coins · <%= record.cards_count %> Karten<%= " · Starter" if record.starter? %><% when Rank %>×<%= record.multiplier %> · Gewicht <%= record.weight %><% end %></td>
+    <td><span class="admin-badge <%= "admin-badge-muted" if record.respond_to?(:active?) && !record.active? %>"><%= record.respond_to?(:active?) ? (record.active? ? "Aktiv" : "Deaktiviert") : "Fester Rank" %></span></td>
+    <td><div class="admin-catalog-actions"><%= link_to "Bearbeiten", edit_polymorphic_path([:admin, record]), class: "button button-outline" if admin_policy(record).update? %>
+      <% if record.is_a?(BrainrotType) && admin_policy(record).update? %>
+        <%= button_to(record.active? ? "Deaktivieren" : "Aktivieren", admin_brainrot_type_path(record), method: :patch, params: { brainrot_type: { active: !record.active? } }, class: "button button-outline", aria: { label: "#{record.name} #{record.active? ? "deaktivieren" : "aktivieren"}" }) %>
+      <% end %>
+      <% if admin_policy(record).destroy? %>
+        <% if @used_type_ids.include?(record.id) %><small>Bereits gezogen · nur deaktivierbar</small>
+        <% else %><%= button_to "Löschen", admin_brainrot_type_path(record), method: :delete, class: "button button-danger", form: { data: { turbo_confirm: "Kartentyp #{record.name} endgültig löschen? Das ist nur möglich, solange keine Karten dieses Typs existieren." } } %><% end %>
+      <% end %>
+    </div></td>
+  </tr><% end %></tbody>
+</table><% if @records.empty? %><p class="admin-pad muted">Noch keine Einträge vorhanden.</p><% end %></div>
+<%= render "admin/shared/pagination" %>

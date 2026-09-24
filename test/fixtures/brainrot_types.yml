@@ -1,0 +1,9 @@
+one:
+  name: Tralalero Tralala
+  rarity: 0
+  base_value: 100
+
+two:
+  name: Bombardiro Crocodilo
+  rarity: 2
+  base_value: 200

@@ -1,0 +1,14 @@
+one:
+  name: E
+  multiplier: 1.00
+  weight: 50
+
+two:
+  name: A
+  multiplier: 3.00
+  weight: 3
+
+ss:
+  name: SS
+  multiplier: 5.00
+  weight: 1

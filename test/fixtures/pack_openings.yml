@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  pack: one
+  coins_spent: 1
+
+two:
+  user: two
+  pack: two
+  coins_spent: 1

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  brainrot_card: one
+  rank: one
+  coins_spent: 1
+
+two:
+  user: two
+  brainrot_card: two
+  rank: two
+  coins_spent: 1

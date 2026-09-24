@@ -1,0 +1,4 @@
+<article class="collection-card card-rarity-<%= card.brainrot_type.rarity %>">
+  <%= render "shared/brainrot_art", type: card.brainrot_type, rank: card.rank %>
+  <div class="collection-info"><h3><%= card.brainrot_type.name %></h3><div class="collection-meta"><span>Kartenwert</span><strong><%= number_with_precision(card.value, precision: 2, strip_insignificant_zeros: true) %> Coins</strong></div></div>
+</article>

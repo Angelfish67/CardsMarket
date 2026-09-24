@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <title><%= content_for(:title) || "Brainrot Market — Sammeln. Handeln. Brainrot." %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="theme-color" content="#f5f4f0">
+    <%= csrf_meta_tags %>
+    <%= action_cable_meta_tag %>
+    <%= csp_meta_tag %>
+    <%= yield :head %>
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+  <body>
+    <a href="#main-content" class="skip-link">Zum Inhalt</a>
+    <header class="site-header">
+      <%= link_to root_path, class: "brand", aria: { label: "Brainrot Market Startseite" } do %>
+        <span class="brand-mark" aria-hidden="true">b.</span>
+        <span>brainrot<span class="brand-sub">market</span></span>
+      <% end %>
+      <% if authenticated? %>
+        <nav class="main-nav" aria-label="Hauptnavigation">
+          <% [["Übersicht", root_path], ["Inventar", inventory_index_path], ["Marktplatz", marketplace_index_path], ["Packs", packs_index_path]].each do |label, path| %>
+            <%= link_to label, path, class: ("is-active" if current_page?(path)), aria: { current: ("page" if current_page?(path)) } %>
+          <% end %>
+          <% if AdminPolicy.new(Current.user).access? %>
+            <%= link_to "Admin", admin_root_path, class: ("is-active" if controller_path.start_with?("admin/")) %>
+          <% end %>
+        </nav>
+        <div class="header-actions">
+          <span class="coin-pill"><span aria-hidden="true">✦</span> <span data-wallet-user="<%= Current.user.id %>" data-wallet-updated-at="<%= Current.user.updated_at.utc.iso8601(6) %>"><%= Current.user.coins %></span> <span>Coins</span></span>
+          <%= button_to "Abmelden", session_path, method: :delete, class: "button button-quiet" %>
+        </div>
+      <% else %>
+        <span class="header-caption">Deine Karten. Dein Kosmos.</span>
+        <%= link_to "Anmelden ↗", new_session_path, class: "button button-outline" %>
+      <% end %>
+    </header>
+    <div class="flash-container">
+      <%= tag.div(flash[:alert], role: "alert", class: "flash flash-error") if flash[:alert] %>
+      <%= tag.div(flash[:notice], role: "status", class: "flash flash-success") if flash[:notice] %>
+    </div>
+    <% if authenticated? %>
+      <div id="sale-notifications-<%= Current.user.id %>" class="sale-notifications"
+        data-controller="sale-notifications" data-sale-notifications-user-id-value="<%= Current.user.id %>"
+        data-turbo-permanent role="status" aria-live="polite" aria-relevant="additions" aria-label="Verkaufsbenachrichtigungen"></div>
+    <% end %>
+    <main id="main-content" class="page-shell"><%= yield %></main>
+    <footer class="site-footer">
+      <span>brainrot market <span aria-hidden="true">✳</span></span>
+      <span>Ein bisschen seltsam. Ziemlich sammelbar.</span>
+      <span>Collect the unexpected.</span>
+    </footer>
+  </body>
+</html>

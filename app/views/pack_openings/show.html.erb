@@ -1,0 +1,13 @@
+<% content_for :title, "Deine neuen Karten — Brainrot Market" %>
+<section class="opening-heading">
+  <span class="eyebrow">DEIN DROP IST DA</span>
+  <h1><%= @cards.size %> Karten. Deine Sammlung.</h1>
+  <p class="muted"><%= @opening.pack.name %> · <%= @opening.coins_spent.zero? ? "Kostenlos geöffnet" : "#{@opening.coins_spent} Coins bezahlt" %></p>
+</section>
+<div class="collection-grid opening-grid">
+  <%= render partial: "shared/brainrot_card", collection: @cards, as: :card %>
+</div>
+<div class="opening-actions">
+  <%= link_to "Zum Inventar ↗", inventory_index_path, class: "button button-primary" %>
+  <%= link_to "Weitere Packs entdecken", packs_index_path, class: "button button-outline" %>
+</div>

@@ -1,0 +1,15 @@
+<% password_digest = BCrypt::Password.create("secure password") %>
+
+one:
+  username: trader_one
+  email_address: one@example.com
+  password_digest: <%= password_digest %>
+  role: 0
+  coins: 1000
+
+two:
+  username: trader_two
+  email_address: two@example.com
+  password_digest: <%= password_digest %>
+  role: 0
+  coins: 1000

@@ -1,0 +1,12 @@
+<% content_for :title, "Kauf nicht möglich — Brainrot Market" %>
+<section class="purchase-failure" aria-labelledby="purchase-error-title">
+  <span class="purchase-dialog-icon" aria-hidden="true">!</span>
+  <span class="eyebrow">DIESER KAUF WURDE NICHT AUSGEFÜHRT</span>
+  <h1 id="purchase-error-title">Kauf nicht möglich</h1>
+  <p role="alert"><%= @purchase_error %></p>
+  <% if @purchase_error == "Dieses Angebot ist nicht mehr verfügbar." %>
+    <p class="muted">Die Karte wurde möglicherweise bereits von einem anderen Benutzer gekauft oder das Angebot wurde zurückgezogen.</p>
+  <% end %>
+  <p class="muted">Für diesen Kauf wurden keine Coins abgebucht.</p>
+  <%= link_to "Zurück zum Marktplatz", marketplace_index_path, class: "button button-primary" %>
+</section>

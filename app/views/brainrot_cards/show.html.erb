@@ -1,0 +1,42 @@
+<% content_for :title, "#{@card.brainrot_type.name} — Deine Karte" %>
+<%= link_to "← Zurück zum Inventar", inventory_index_path, class: "text-link" %>
+<div class="card-detail-layout">
+  <div class="card-detail-art"><%= render "shared/brainrot_card", card: @card %></div>
+  <section class="card-detail-panel">
+    <span class="eyebrow">DEINE KARTE · #<%= @card.id %></span>
+    <h1><%= @card.brainrot_type.name %></h1>
+    <p class="muted"><%= @card.brainrot_type.description.presence || "Ein Teil deiner Brainrot-Sammlung." %></p>
+    <dl class="card-facts">
+      <div><dt>Seltenheit</dt><dd><%= @card.brainrot_type.rarity.humanize %></dd></div>
+      <div><dt>Rank</dt><dd><%= @card.rank.name %> · ×<%= @card.rank.multiplier %></dd></div>
+      <div><dt>Grundwert</dt><dd><%= @card.brainrot_type.base_value %> Coins</dd></div>
+      <div><dt>Kartenwert</dt><dd><%= number_with_precision(@card.value, precision: 2, strip_insignificant_zeros: true) %> Coins</dd></div>
+    </dl>
+    <% if @offer %>
+      <div class="info-banner"><p>Deine Karte wird für <strong><%= @offer.price %> Coins</strong> angeboten. Für einen Rank-Pull musst du das Angebot zuerst zurückziehen.</p></div>
+      <%= button_to "Angebot zurückziehen", market_offer_path(@offer, return_to: "card"), method: :delete, class: "button button-outline" %>
+    <% else %>
+      <%= link_to "Karte verkaufen ↗", new_brainrot_card_market_offer_path(@card), class: "button button-outline" %>
+    <% end %>
+    <section class="card-rank-section">
+      <h2>Rank verbessern.</h2>
+      <p class="muted">Ein Pull kostet <strong><%= @card.brainrot_type.base_value %> Coins</strong>. Dein Rank kann steigen oder gleich bleiben, aber nie sinken. Auch bei gleichem Rank werden Coins verbraucht.</p>
+      <% if @card.rank.name == "SS" %>
+        <span class="rank-max">✦ Höchster Rank erreicht</span>
+      <% elsif @offer %>
+        <button class="button button-disabled" disabled>Während des Verkaufs gesperrt</button>
+      <% elsif Current.user.coins < @card.brainrot_type.base_value %>
+        <button class="button button-disabled" disabled>Nicht genügend Coins</button>
+      <% else %>
+        <%= button_to "Für #{@card.brainrot_type.base_value} Coins Rank ziehen ✦", brainrot_card_rank_pulls_path(@card),
+          params: { return_to: "card" }, method: :post, class: "button button-primary",
+          data: { turbo_submits_with: "Rank wird gezogen …" } %>
+      <% end %>
+    </section>
+    <% if @rank_pulls.any? %>
+      <details class="card-pull-history"><summary>Deine letzten Rank-Pulls für diese Karte</summary>
+        <ul><% @rank_pulls.each do |pull| %><li><%= pull.created_at.strftime("%d.%m.%Y %H:%M UTC") %> · Rank <strong><%= pull.rank.name %></strong> · <%= pull.coins_spent %> Coins</li><% end %></ul>
+      </details>
+    <% end %>
+  </section>
+</div>

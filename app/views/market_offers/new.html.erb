@@ -1,0 +1,31 @@
+<% content_for :title, "Karte verkaufen — Brainrot Market" %>
+<div class="page-heading">
+  <div><span class="eyebrow">DEINE KARTE. DEIN PREIS.</span><h1>Platz für neue Favoriten.</h1><p class="muted">Biete deine Karte anderen Sammlern an.</p></div>
+  <%= link_to "← Zum Inventar", inventory_index_path, class: "button button-outline" %>
+</div>
+<section class="sell-layout">
+  <div class="sell-card-preview"><%= render "shared/brainrot_card", card: @card %></div>
+  <div class="sell-panel">
+    <span class="eyebrow">AUF DEN MARKTPLATZ</span>
+    <h2>Was ist sie dir wert?</h2>
+    <p class="muted">Du bestimmst den Verkaufspreis. Das Einstellen ist kostenlos.</p>
+    <% if @offer.errors.any? %>
+      <div class="form-errors" role="alert">
+        <strong>Bitte überprüfe deinen Preis.</strong>
+        <ul><% @offer.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>
+      </div>
+    <% end %>
+    <%= form_with model: @offer, url: brainrot_card_market_offers_path(@card), class: "auth-form" do |form| %>
+      <div class="field">
+        <%= form.label :price, "Verkaufspreis in Coins" %>
+        <%= form.number_field :price, min: 1, max: User::MAX_COINS, step: 1, required: true, autofocus: true, inputmode: "numeric", aria: { describedby: "sale-rules" } %>
+        <small>Wähle eine positive ganze Zahl. Der Kartenwert ist nur ein Vorschlag.</small>
+      </div>
+      <div id="sale-rules" class="sale-rules">
+        <p>Die Karte bleibt bis zum Kauf in deinem Inventar. Solange sie angeboten wird, sind Rank-Pulls gesperrt.</p>
+        <p>Du kannst dein Angebot jederzeit zurückziehen, solange es noch nicht gekauft wurde. Beim Kauf erhältst du den vollen Verkaufspreis.</p>
+      </div>
+      <%= form.submit "Auf dem Marktplatz anbieten", class: "button button-primary button-full", data: { turbo_submits_with: "Wird eingestellt …" } %>
+    <% end %>
+  </div>
+</section>

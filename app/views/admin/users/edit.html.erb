@@ -1,0 +1,12 @@
+<% content_for :title, "Berechtigungen — Brainrot Market" %>
+<%= render "admin/shared/nav" %>
+<div class="page-heading"><div><h1><%= @user.username %>.</h1><p class="muted"><%= @user.email_address %> · Berechtigungen bearbeiten</p></div></div>
+<section class="admin-panel admin-form-panel">
+<%= render "admin/shared/errors", record: @user %>
+<%= form_with model: [:admin, @user], class: "admin-form", data: { turbo_confirm: "Berechtigungen speichern? Bei einer Änderung werden die bestehenden Sitzungen dieses Kontos beendet." } do |form| %>
+  <div class="field"><%= form.label :role, "Rolle" %><%= form.select :role, [["Trader – sammeln und handeln", "trader"], ["Admin – zusätzlich Verwaltung und Moderation", "admin"]] %></div>
+  <% if user_policy(@user).suspend? %><label class="admin-check"><%= form.check_box :suspended %> Konto sperren</label><% end %>
+  <p class="admin-note">Eine Sperre verhindert neue Anmeldungen und beendet bestehende Sitzungen. Karten, Guthaben und Historie bleiben erhalten. Der letzte aktive Admin kann nicht herabgestuft werden.</p>
+  <div class="admin-form-actions"><%= form.submit "Berechtigungen speichern", class: "button button-primary" %><%= link_to "Abbrechen", admin_users_path, class: "button button-outline" %></div>
+<% end %>
+</section>

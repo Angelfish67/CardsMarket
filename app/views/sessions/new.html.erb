@@ -1,0 +1,22 @@
+<% content_for :title, "Anmelden — Brainrot Market" %>
+<section class="auth-layout">
+  <%= render "shared/auth_intro" %>
+  <div class="auth-panel">
+    <span class="eyebrow">DEINE SAMMLUNG WARTET</span>
+    <h1>Willkommen zurück.</h1>
+    <p class="muted">Melde dich an und tauche wieder ein.</p>
+    <%= form_with url: session_path, class: "auth-form" do |form| %>
+      <div class="field">
+        <%= form.label :email_address, "E-Mail-Adresse" %>
+        <%= form.email_field :email_address, required: true, autofocus: true, autocomplete: "username", placeholder: "du@beispiel.ch" %>
+      </div>
+      <div class="field">
+        <%= form.label :password, "Passwort" %>
+        <%= form.password_field :password, required: true, autocomplete: "current-password", maxlength: 72, placeholder: "Dein Passwort" %>
+      </div>
+      <%= form.submit "Anmelden", class: "button button-primary button-full" %>
+    <% end %>
+    <p class="auth-switch">Noch nicht dabei? <%= link_to "Konto erstellen ↗", new_registration_path %></p>
+    <div class="auth-footnote"><span aria-hidden="true">✦</span> Dein nächster Lieblings-Brainrot wartet schon.</div>
+  </div>
+</section>

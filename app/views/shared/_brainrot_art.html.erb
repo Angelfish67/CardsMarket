@@ -1,0 +1,10 @@
+<div class="collection-art rarity-<%= type.rarity %>" data-controller="card-image">
+  <span class="card-rarity"><%= type.rarity.humanize %></span>
+  <% if local_assigns[:rank] %><span class="rank-tag"><%= rank.name %></span><% end %>
+  <span class="card-monogram" aria-hidden="true"><%= type.name.to_s.first(2).upcase %></span>
+  <span class="art-star" aria-hidden="true">✳</span>
+  <% if (source = brainrot_image_source(type)).present? %>
+    <%= image_tag source, alt: type.name, class: "brainrot-image", loading: "lazy", decoding: "async",
+      referrerpolicy: "no-referrer", data: { card_image_target: "image", action: "load->card-image#loaded error->card-image#failed" } %>
+  <% end %>
+</div>

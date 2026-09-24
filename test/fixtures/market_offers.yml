@@ -1,0 +1,11 @@
+one:
+  user: one
+  brainrot_card: one
+  price: 100
+  status: 0
+
+two:
+  user: two
+  brainrot_card: two
+  price: 200
+  status: 2

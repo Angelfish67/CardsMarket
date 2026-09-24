@@ -1,0 +1,36 @@
+<% content_for :title, "Konto erstellen — Brainrot Market" %>
+<section class="auth-layout">
+  <%= render "shared/auth_intro" %>
+  <div class="auth-panel">
+    <span class="eyebrow">DEINE SAMMLUNG BEGINNT HIER</span>
+    <h1>Bereit für Brainrot?</h1>
+    <p class="muted">Erstelle dein Konto. Die ersten 1.000 Coins gehen auf uns.</p>
+    <% if @user.errors.any? %>
+      <div role="alert" class="form-errors">
+        <strong>Fast geschafft. Überprüfe deine Angaben:</strong>
+        <ul><% @user.errors.full_messages.each do |message| %><li><%= message %></li><% end %></ul>
+      </div>
+    <% end %>
+    <%= form_with model: @user, url: registration_path, class: "auth-form" do |form| %>
+      <div class="field">
+        <%= form.label :username, "Benutzername" %>
+        <%= form.text_field :username, required: true, maxlength: 30, autocomplete: "username", autofocus: true, placeholder: "Dein Name im Market" %>
+      </div>
+      <div class="field">
+        <%= form.label :email_address, "E-Mail-Adresse" %>
+        <%= form.email_field :email_address, required: true, autocomplete: "email", placeholder: "du@beispiel.ch" %>
+      </div>
+      <div class="field">
+        <%= form.label :password, "Passwort" %>
+        <%= form.password_field :password, required: true, minlength: 12, maxlength: 72, autocomplete: "new-password", aria: { describedby: "password-rules" }, placeholder: "Eine gute Passphrase" %>
+        <small id="password-rules">Mindestens 12 Zeichen, maximal 72 Bytes.</small>
+      </div>
+      <div class="field">
+        <%= form.label :password_confirmation, "Passwort wiederholen" %>
+        <%= form.password_field :password_confirmation, required: true, minlength: 12, maxlength: 72, autocomplete: "new-password", placeholder: "Noch einmal zur Sicherheit" %>
+      </div>
+      <%= form.submit "Registrieren", class: "button button-primary button-full" %>
+    <% end %>
+    <p class="auth-switch">Schon ein Konto? <%= link_to "Anmelden ↗", new_session_path %></p>
+  </div>
+</section>
