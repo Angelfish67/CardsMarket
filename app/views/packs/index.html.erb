@@ -4,23 +4,36 @@
   <section id="starter-pack" class="starter-welcome"><span class="eyebrow">DEIN START IN DIE SAMMLUNG</span><h2>Deine ersten 3 Karten warten.</h2><p>Öffne unten dein kostenloses Starter-Pack. Du erhältst drei zufällige Karten mit eigenen Ranks – einmal pro Konto.</p><%= link_to "Später öffnen · Zur Übersicht →", root_path, class: "text-link" %></section>
 <% end %>
 <div class="info-banner"><span aria-hidden="true">✦</span><p>Dein Starter-Pack ist einmalig kostenlos. Weitere Packs kannst du mit Coins öffnen. Jede Karte erhält einen zufälligen Rank; doppelte Charaktere sind möglich.</p></div>
-<% if @rarity_chances.any? %>
-  <details class="rarity-guide"><summary>Welche Karten kann ich ziehen?</summary>
-    <p>Die Seltenheit wird zuerst gezogen, danach eine gleich zufällige Karte dieser Stufe. Der Rank E–SS wird unabhängig davon gezogen.</p>
-    <div class="rarity-odds"><% @rarity_chances.each do |rarity, chance| %><span class="rarity-chip rarity-<%= rarity %>"><strong><%= rarity.humanize %></strong><span><%= number_with_precision(chance, precision: 1, strip_insignificant_zeros: true) %> %</span></span><% end %></div>
-    <p class="muted">Aktuelle Chancen für den verfügbaren Katalog. Jede Karte wird unabhängig gezogen; doppelte Charaktere sind möglich.</p>
-  </details>
-<% end %>
+<details class="rarity-guide">
+  <summary>Wie werden die Karten gezogen?</summary>
+  <p>Jedes Pack hat eigene erlaubte Seltenheitsstufen. Zuerst wird eine verfügbare Stufe nach ihrem relativen Gewicht gezogen, danach eine gleich zufällige aktive Karte dieser Stufe. Der Rank E–SS wird unabhängig davon gezogen.</p>
+  <p class="muted">Die aktuellen Chancen stehen beim jeweiligen Pack. Jede Karte wird unabhängig gezogen; doppelte Charaktere sind möglich.</p>
+</details>
 <% if @packs.any? %>
   <div class="pack-grid"><% @packs.each do |pack| %>
-    <article class="pack-card">
+    <% chances = pack.rarity_chances(available_rarities: @available_rarities) %>
+    <article class="pack-card" id="<%= dom_id(pack) %>">
       <div class="pack-art <%= "pack-starter" if pack.starter? %>"><span class="pack-ribbon"><%= pack.starter? ? "DEIN ERSTER DROP" : "DEIN NÄCHSTER DROP" %></span><div class="booster"><span>CARDS<br>MARKET</span><span class="booster-star" aria-hidden="true">✳</span><span>EXPECT<br>THE UNEXPECTED.</span></div></div>
       <div class="pack-body">
         <h2><%= pack.name %></h2>
         <p class="muted"><%= pluralize(pack.starter? ? 3 : pack.cards_count, "Karte", "Karten") %> · Zufällige Charaktere &amp; Ranks</p>
+        <div class="pack-rarity-summary">
+          <p><strong>Erlaubte Stufen:</strong> <%= pack.allowed_rarities.map(&:humanize).join(", ") %></p>
+          <% if chances.any? %>
+            <details class="pack-odds">
+              <summary>Aktuelle Ziehchancen</summary>
+              <ul><% chances.each do |rarity, chance| %><li><span><%= rarity.humanize %></span><strong><%= number_with_precision(chance, precision: 1, strip_insignificant_zeros: true) %> %</strong></li><% end %></ul>
+              <p class="muted">Pro Karte, bezogen auf aktive Kartentypen. Stufen ohne aktive Karten sind derzeit nicht ziehbar.</p>
+            </details>
+          <% else %>
+            <p class="muted">Aktuell sind keine aktiven Karten dieser Stufen verfügbar. Bitte wähle ein anderes Pack.</p>
+          <% end %>
+        </div>
         <div class="pack-price"><strong><%= pack.price.zero? ? "Kostenlos" : "#{pack.price} Coins" %></strong><span class="coming-soon"><%= pack.starter? ? "EINMAL PRO KONTO" : "BELIEBIG OFT" %></span></div>
         <% if pack.starter? && @starter_opened %>
           <button class="button button-disabled button-full" disabled>Starter-Pack bereits geöffnet</button>
+        <% elsif chances.empty? %>
+          <button class="button button-disabled button-full" disabled>Keine passenden Karten verfügbar</button>
         <% elsif Current.user.coins < pack.price %>
           <button class="button button-disabled button-full" disabled>Nicht genügend Coins</button>
         <% else %>

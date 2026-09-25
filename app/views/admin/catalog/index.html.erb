@@ -6,7 +6,7 @@
   <thead><tr><th>Name</th><th>Werte</th><th>Status</th><th><span class="visually-hidden">Aktionen</span></th></tr></thead>
   <tbody><% @records.each do |record| %><tr id="<%= dom_id(record) %>">
     <td><% if record.is_a?(BrainrotType) %><div class="admin-type-art"><%= render "shared/brainrot_art", type: record %></div><% end %><strong><%= record.name %></strong><small>#<%= record.id %></small></td>
-    <td><% case record %><% when BrainrotType %><%= record.rarity.humanize %> · <%= record.base_value %> Coins Grundwert<% when Pack %><%= record.price %> Coins · <%= record.cards_count %> Karten<%= " · Starter" if record.starter? %><% when Rank %>×<%= record.multiplier %> · Gewicht <%= record.weight %><% end %></td>
+    <td><% case record %><% when BrainrotType %><%= record.rarity.humanize %> · <%= record.base_value %> Coins Grundwert<% when Pack %><%= record.price %> Coins · <%= record.cards_count %> Karten<%= " · Starter" if record.starter? %><small><%= record.allowed_rarities.map(&:humanize).join(" · ") %></small><% when Rank %>×<%= record.multiplier %> · Gewicht <%= record.weight %><% end %></td>
     <td><span class="admin-badge <%= "admin-badge-muted" if record.respond_to?(:active?) && !record.active? %>"><%= record.respond_to?(:active?) ? (record.active? ? "Aktiv" : "Deaktiviert") : "Fester Rank" %></span></td>
     <td><div class="admin-catalog-actions"><%= link_to "Bearbeiten", edit_polymorphic_path([:admin, record]), class: "button button-outline" if admin_policy(record).update? %>
       <% if record.is_a?(BrainrotType) && admin_policy(record).update? %>

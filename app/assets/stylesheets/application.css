@@ -171,3 +171,14 @@ body:has(.purchase-dialog[open]){overflow:hidden}
 .account-deactivation{grid-column:1/-1;border-color:#e9bfc6}
 .account-deactivation .field{max-width:480px}
 @media(max-width:760px){.account-settings{grid-template-columns:1fr}.account-panel{padding:22px}}
+/* Pack rarity configuration and probabilities */
+.pack-rarity-fieldset{border:1px solid var(--line);border-radius:14px;padding:20px;min-width:0;margin:0}
+.pack-rarity-fieldset legend{font-weight:750;padding:0 6px}
+.pack-rarity-fieldset>p{font-size:13px}
+.pack-rarity-options{display:flex;flex-wrap:wrap;gap:14px 24px}
+.pack-rarity-summary{margin:18px 0;padding:16px;background:var(--paper);border-radius:12px}
+.pack-rarity-summary p{font-size:12px;margin:0;overflow-wrap:anywhere}
+.pack-odds{margin-top:12px}
+.pack-odds summary{font-size:12px;font-weight:700;cursor:pointer;color:var(--purple)}
+.pack-odds ul{list-style:none;padding:0;margin:10px 0}
+.pack-odds li{display:flex;justify-content:space-between;gap:12px;font-size:12px;padding:3px 0}

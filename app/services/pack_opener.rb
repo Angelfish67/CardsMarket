@@ -4,16 +4,16 @@ class PackOpener
     # and starter status after the previous request has committed.
     user.with_lock do
       raise GameplayError, "Dieses Konto ist deaktiviert." if user.suspended?
-      pack.reload
+      pack.lock!("FOR SHARE")
       raise GameplayError, "Dieses Pack ist nicht mehr verfügbar." unless pack.active?
       if pack.starter? && (user.starter_pack_opened_at? || user.pack_openings.exists?(starter: true))
         raise GameplayError, "Du hast dein Starter-Pack bereits geöffnet."
       end
       raise GameplayError, "Du hast nicht genügend Coins für dieses Pack." if user.coins < pack.price
 
-      types = BrainrotType.active.order(:id).lock("FOR KEY SHARE").to_a
+      types = pack.available_types.order(:id).lock("FOR KEY SHARE").to_a
       ranks = Rank.order(:id).to_a
-      raise GameplayError, "Aktuell sind keine Karten verfügbar. Bitte versuche es später erneut." if types.empty?
+      raise GameplayError, "Für die erlaubten Seltenheitsstufen dieses Packs sind aktuell keine Karten verfügbar. Bitte wähle ein anderes Pack." if types.empty?
       raise GameplayError, "Aktuell sind keine Ranks verfügbar." if ranks.empty?
 
       type_draw = WeightedBrainrotDraw.new(types: types)

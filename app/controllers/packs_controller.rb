@@ -1,6 +1,6 @@
 class PacksController < ApplicationController
   def index
-    @rarity_chances = WeightedBrainrotDraw.chances(rarities: BrainrotType.active.distinct.pluck(:rarity))
+    @available_rarities = BrainrotType.active.distinct.pluck(:rarity)
     @packs = Pack.active.order(starter: :desc, price: :asc)
     @starter_opened = !Current.user.starter_pack_pending?
   end

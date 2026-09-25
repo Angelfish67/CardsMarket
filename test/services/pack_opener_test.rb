@@ -81,4 +81,43 @@ class PackOpenerTest < ActiveSupport::TestCase
     assert_equal 1, opening.brainrot_cards.distinct.count(:brainrot_type_id)
     assert_equal 3, opening.brainrot_cards.distinct.count(:id)
   end
+  test "a restricted pack only draws allowed active cards with independent ranks" do
+    pack = packs(:beginner)
+    pack.update!(allowed_rarities: [ "legendary" ])
+    BrainrotType.create!(name: "Inactive legendary", rarity: :legendary, base_value: 100, active: false)
+    legendary = BrainrotType.create!(name: "Allowed legendary", rarity: :legendary, base_value: 100)
+    e_ticket = Rank.order(:id).take_while { |rank| rank.name != "E" }.sum(&:weight)
+    opening = PackOpener.call(user: users(:one), pack: pack, random: ScriptedRandom.new(*([ 0, 0, e_ticket ] * 3)))
+    assert_equal [ legendary.id ], opening.brainrot_cards.distinct.pluck(:brainrot_type_id)
+    assert opening.brainrot_cards.all? { |card| card.rank.name == "E" }
+    assert_equal 900, users(:one).reload.coins
+  end
+
+  test "selected tiers keep relative weights and omitted tiers never appear" do
+    pack = packs(:beginner)
+    pack.update!(allowed_rarities: %w[rare legendary])
+    legendary = BrainrotType.create!(name: "Weighted legendary", rarity: :legendary, base_value: 100)
+    opening = PackOpener.call(user: users(:one), pack: pack,
+      random: ScriptedRandom.new(0, 0, 0, 9, 0, 0, 10, 0, 0))
+    assert_equal [ brainrot_types(:two).id, brainrot_types(:two).id, legendary.id ],
+      opening.brainrot_cards.order(:id).pluck(:brainrot_type_id)
+  end
+
+  test "a stale pack object uses the stored allowed rarities" do
+    pack = Pack.find(packs(:beginner).id)
+    packs(:beginner).update!(allowed_rarities: [ "rare" ])
+    opening = PackOpener.call(user: users(:one), pack: pack)
+    assert_equal [ brainrot_types(:two).id ], opening.brainrot_cards.distinct.pluck(:brainrot_type_id)
+  end
+
+  test "unavailable allowed tiers never charge coins or consume the starter" do
+    pack = packs(:starter)
+    pack.update!(allowed_rarities: [ "legendary" ])
+    BrainrotType.create!(name: "Disabled legendary", rarity: :legendary, base_value: 100, active: false)
+    assert_no_difference [ "PackOpening.count", "BrainrotCard.count" ] do
+      assert_raises(GameplayError) { PackOpener.call(user: users(:one), pack: pack) }
+    end
+    assert_equal 1000, users(:one).reload.coins
+    assert_nil users(:one).starter_pack_opened_at
+  end
 end

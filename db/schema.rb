@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_09_24_074401) do
+ActiveRecord::Schema[8.1].define(version: 2026_09_25_072535) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -119,6 +119,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_24_074401) do
 
   create_table "packs", force: :cascade do |t|
     t.boolean "active", default: true, null: false
+    t.string "allowed_rarities", default: ["common", "uncommon", "rare", "epic", "legendary"], null: false, array: true
     t.integer "cards_count", null: false
     t.datetime "created_at", null: false
     t.string "name", null: false
@@ -126,6 +127,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_24_074401) do
     t.boolean "starter", default: false, null: false
     t.datetime "updated_at", null: false
     t.check_constraint "NOT starter OR price = 0", name: "starter_packs_free"
+    t.check_constraint "cardinality(allowed_rarities) > 0 AND allowed_rarities <@ ARRAY['common'::character varying, 'uncommon'::character varying, 'rare'::character varying, 'epic'::character varying, 'legendary'::character varying] AND array_position(allowed_rarities, NULL::character varying) IS NULL", name: "packs_allowed_rarities_valid"
     t.check_constraint "price >= 0 AND cards_count > 0", name: "packs_valid_values"
   end
 
@@ -150,7 +152,7 @@ ActiveRecord::Schema[8.1].define(version: 2026_09_24_074401) do
     t.integer "weight", null: false
     t.index ["name"], name: "index_ranks_on_name", unique: true
     t.check_constraint "multiplier > 0::numeric AND weight > 0", name: "ranks_positive_values"
-    t.check_constraint "name::text = ANY (ARRAY['E'::character varying::text, 'D'::character varying::text, 'C'::character varying::text, 'B'::character varying::text, 'A'::character varying::text, 'SS'::character varying::text])", name: "ranks_valid_name"
+    t.check_constraint "name::text = ANY (ARRAY['E'::character varying, 'D'::character varying, 'C'::character varying, 'B'::character varying, 'A'::character varying, 'SS'::character varying]::text[])", name: "ranks_valid_name"
   end
 
   create_table "sessions", force: :cascade do |t|

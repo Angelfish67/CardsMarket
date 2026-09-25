@@ -258,6 +258,25 @@ Einstiegspunkte: `/` (Dashboard), `/packs/index`, `/inventory/index`,
 `/marketplace/index`, `/account/edit` und `/admin`.
 Alle technischen Routen zeigt `bin/rails routes`.
 
+### Seltenheitsstufen eines Packs einstellen
+
+Unter **Admin → Packs → Neuer Eintrag / Bearbeiten** bestimmen die Checkboxen
+**Erlaubte Seltenheitsstufen**, welche Karten aus dem Pack gezogen werden dürfen.
+Mindestens eine Stufe muss ausgewählt sein. Bestehende und neue Packs erlauben
+standardmäßig alle fünf Stufen. Änderungen gelten für zukünftige Öffnungen.
+
+Es zählen nur aktive Kartentypen aus den ausgewählten Stufen. Ihre relativen
+Ziehgewichte bleiben Common 60, Uncommon 25, Rare 10, Epic 4 und Legendary 1;
+die Chancen werden auf die tatsächlich verfügbaren erlaubten Stufen umgerechnet
+und direkt beim Pack angezeigt. Ein Pack nur mit Legendary hat daher 100 %
+Legendary, sofern aktive Legendary-Kartentypen existieren. Ranks E–SS werden
+weiterhin unabhängig gezogen.
+
+Sind keine passenden aktiven Karten verfügbar, wird das Öffnen auch serverseitig
+abgelehnt. Es entstehen keine Karten oder Kosten, und ein Starter-Pack gilt
+dadurch nicht als verbraucht. Änderungen der Auswahl werden im Admin-Protokoll
+festgehalten. Für bestehende Installationen zuerst die neue Migration mit
+`bin/rails db:prepare` ausführen.
 ## Automatisierte Tests und Qualitätsprüfungen
 
 Im Ubuntu-Terminal im Projektordner bei laufendem PostgreSQL:

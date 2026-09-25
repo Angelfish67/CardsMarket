@@ -9,10 +9,23 @@
     <%= render "admin/catalog/image_field", form: form, record: @record %>
     <div class="field"><%= form.label :description, "Beschreibung" %><%= form.text_area :description, rows: 4, maxlength: 2000 %></div>
     <div class="admin-form-grid"><div class="field"><%= form.label :rarity, "Seltenheit" %><%= form.select :rarity, BrainrotType.rarities.keys.map { |r| [r.humanize, r] } %></div><div class="field"><%= form.label :base_value, "Grundwert in Coins" %><%= form.number_field :base_value, required: true, min: 1, max: User::MAX_COINS %></div></div>
-    <p class="admin-note">Ziehchancen nach Seltenheit: Common 60 %, Uncommon 25 %, Rare 10 %, Epic 4 %, Legendary 1 %. Nur verfügbare Stufen zählen; innerhalb einer Stufe sind alle aktiven Kartentypen gleich wahrscheinlich. Seltenheit und Rank sind unabhängig.</p>
+    <p class="admin-note">Relative Ziehgewichte: Common 60, Uncommon 25, Rare 10, Epic 4, Legendary 1. Nur im jeweiligen Pack erlaubte und verfügbare Stufen zählen; innerhalb einer Stufe sind alle aktiven Kartentypen gleich wahrscheinlich. Seltenheit und Rank sind unabhängig.</p>
     <p class="admin-note">Bild, Seltenheit und Grundwert gelten für alle Karten dieses Typs, auch bereits gezogene. Der Grundwert bestimmt außerdem die Kosten für Rank-Pulls.</p>
   <% elsif @record.is_a?(Pack) %>
     <div class="admin-form-grid"><div class="field"><%= form.label :price, "Preis in Coins" %><%= form.number_field :price, required: true, min: 0, max: User::MAX_COINS %></div><div class="field"><%= form.label :cards_count, "Karten pro Pack" %><%= form.number_field :cards_count, required: true, min: 1, max: 100 %></div></div>
+    <fieldset class="pack-rarity-fieldset">
+      <legend>Erlaubte Seltenheitsstufen</legend>
+      <p class="muted" id="pack-rarity-help">Mindestens eine Stufe wählen. Nur aktive Kartentypen dieser Stufen können gezogen werden. Die Auswahl gilt für zukünftige Pack-Öffnungen; Ranks E–SS werden weiterhin unabhängig gezogen.</p>
+      <%= hidden_field_tag "pack[allowed_rarities][]", "" %>
+      <div class="pack-rarity-options">
+        <% BrainrotType.rarities.each_key do |rarity| %>
+          <label class="admin-check" for="pack_rarity_<%= rarity %>">
+            <%= check_box_tag "pack[allowed_rarities][]", rarity, @record.allowed_rarities.to_a.include?(rarity), id: "pack_rarity_#{rarity}", aria: { describedby: "pack-rarity-help" } %>
+            <%= rarity.humanize %>
+          </label>
+        <% end %>
+      </div>
+    </fieldset>
     <% if @record.new_record? %><label class="admin-check"><%= form.check_box :starter %> Einmaliges Starter-Pack (kostenlos, genau 3 Karten)</label><% else %><p class="admin-note"><%= @record.starter? ? "Starter-Pack: kostenlos, 3 Karten, einmal pro Konto." : "Reguläres Pack: bei ausreichendem Guthaben wiederholt kaufbar." %> Der Pack-Typ kann nach dem Erstellen nicht verändert werden.</p><% end %>
   <% else %>
     <div class="admin-form-grid"><div class="field"><%= form.label :multiplier, "Wert-Multiplikator" %><%= form.number_field :multiplier, required: true, min: 0.01, max: 9999.99, step: 0.01 %></div><div class="field"><%= form.label :weight, "Relatives Ziehgewicht" %><%= form.number_field :weight, required: true, min: 1, max: User::MAX_COINS %></div></div>
