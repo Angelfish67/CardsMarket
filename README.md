@@ -9,7 +9,7 @@ belegten Performance-Stand. Diese README enthält die technische Einstiegshilfe.
 
 ## Implementierte Funktionen
 
-- Registrierung, Login, Logout und serverseitige Sitzungen.
+- Registrierung, Login, Logout, serverseitige Sitzungen und persönliche Kontoverwaltung.
 - 1.000 Start-Coins, einmaliges kostenloses Starter-Pack mit drei Karten und weitere konfigurierbare Packs.
 - Kartentypen mit fünf Seltenheitsstufen und optionalem HTTPS-Bildlink; einzelne Karten mit Rank E bis SS.
 - Inventar mit auf- und absteigender Sortierung nach Ziehdatum, Name, Seltenheit, Rank oder Kartenwert; eigene Kartendetails mit Rank-Pulls und den letzten zehn eigenen Pulls je Karte.
@@ -117,6 +117,29 @@ zurückgerollt. Gleichzeitige Gutschriften werden über Datenbanksperren abgesic
 Das Guthaben darf höchstens 2.147.483.647 Coins betragen.
 Empfänger sehen ihr neues Guthaben beim nächsten Laden der Seite.
 
+## Eigenes Konto verwalten
+
+Unter **Mein Konto** können angemeldete Benutzer ihren Benutzernamen und ihre
+E-Mail-Adresse ändern, ein neues Passwort setzen oder ihr Konto deaktivieren.
+Jede Änderung erfordert das aktuelle Passwort. Benutzername und E-Mail bleiben
+eindeutig und werden weiterhin normalisiert. Neue Passwörter müssen mindestens
+12 Zeichen lang sein, dürfen höchstens 72 Bytes belegen und müssen wiederholt
+werden. Passwortprüfungen sind auf zehn Änderungsversuche innerhalb von drei
+Minuten pro IP-Adresse begrenzt.
+
+Nach einer Passwort- oder E-Mail-Änderung werden alle Sitzungen einschließlich
+WebSocket-Verbindungen widerrufen; anschließend ist eine erneute Anmeldung nötig.
+Eine reine Änderung des Benutzernamens lässt die Sitzungen bestehen.
+Rollen, Guthaben und andere Konten können hier nicht verändert werden.
+
+Eine Deaktivierung verlangt zusätzlich eine ausdrückliche Bestätigung. Sie setzt
+den bestehenden Kontosperrstatus, zieht aktive Verkaufsangebote zurück und beendet
+alle Sitzungen. Karten, Coins und Historie bleiben erhalten. Ein aktiver Admin
+kann das Konto über **Admin → Benutzer → Berechtigungen → Konto sperren**
+wieder freigeben, indem er das Häkchen entfernt. Zurückgezogene Angebote bleiben
+zurückgezogen. Der letzte aktive Admin kann sich nicht deaktivieren.
+Eine vollständige Kontolöschung und eine Selbstreaktivierung sind nicht vorgesehen.
+
 ## Wichtige Seiten und Routen
 
 | Methode und Pfad | Funktion |
@@ -124,6 +147,9 @@ Empfänger sehen ihr neues Guthaben beim nächsten Laden der Seite.
 | `GET /registration/new`, `POST /registration` | Registrierung |
 | `GET /session/new`, `POST /session` | Login |
 | `DELETE /session` | Logout |
+| `GET /account/edit`, `PATCH /account` | Eigene Profildaten anzeigen und ändern |
+| `PATCH /account/password` | Eigenes Passwort ändern |
+| `POST /account/deactivate` | Eigenes Konto deaktivieren |
 | `GET /` | Geschütztes Dashboard |
 | `GET /packs/index` | Aktive Packs und Seltenheitschancen |
 | `POST /packs/:id/open` | Pack öffnen |

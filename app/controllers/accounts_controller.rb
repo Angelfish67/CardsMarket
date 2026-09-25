@@ -1,6 +1,6 @@
 class AccountsController < ApplicationController
   before_action :set_account
-  after_action :prevent_account_caching
+  before_action :prevent_account_caching
   rate_limit to: 10, within: 3.minutes, only: %i[ update password deactivate ],
     with: -> { redirect_to edit_account_path, alert: "Bitte versuche es später erneut." }
   rescue_from AccountManager::Forbidden, with: -> { head :forbidden }
